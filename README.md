@@ -5,21 +5,21 @@ Make sure you have Node installed.
 Type node -v into your terminal and if you get a version then you have node installed.
 If you get an error then you need to install node here: https://nodejs.org/en
 
-Next Cd into the client directory and run npm i to set up any dependencies for nextjs.
+Next cd into the client directory and run ```npm i``` to set up any dependencies for nextjs.
 
 Run 
-```bash pip install foobar```   
+```pip install foobar```   
 to start next.js in development mode.
 Once you confirm that is working you can press ctrl+c to exit.
 
 Setting up python:
-Make sure you have python installed. You can check using python -v or python3 for mac. 
+Make sure you have python installed. You can check using ```python -v``` or ```python3 -v``` for mac. 
 
 Next install flask which will be used to link the backend and frontend. 
-Run pip install flask(windows) pip3 install flask (mac). 
+Run ```pip install flask```(windows) or ```pip3 install flask```(mac). 
 
 For good measure also install CORS:
-pip install flask-cors
+```pip install flask-cors```
 
 
 
