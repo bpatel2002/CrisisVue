@@ -1,5 +1,6 @@
 # CapstoneMassShootingWebpage
-Getting Setup:
+## Getting started
+
 Make sure you have Node installed. 
 Type node -v into your terminal and if you get a version then you have node installed.
 If you get an error then you need to install node here: https://nodejs.org/en
@@ -20,7 +21,7 @@ pip install flask-cors
 
 
 
-## Getting started
+
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
