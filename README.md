@@ -7,7 +7,9 @@ If you get an error then you need to install node here: https://nodejs.org/en
 
 Next Cd into the client directory and run npm i to set up any dependencies for nextjs.
 
-Run npm run dev to start next.js in development mode.
+Run 
+```bash pip install foobar```   
+to start next.js in development mode.
 Once you confirm that is working you can press ctrl+c to exit.
 
 Setting up python:
