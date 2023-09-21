@@ -1,0 +1,5 @@
+Flask==2.2.5
+requests==2.27.1
+requests-file==1.5.1
+Werkzeug==2.2.3
+wsgiprox==1.5.2
