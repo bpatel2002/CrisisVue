@@ -12,20 +12,14 @@ Run
 to start next.js in development mode.
 Once you confirm that is working you can press ctrl+c to exit.
 
-VENV SETUP:
-Navigate to the server directory
-create venv by running python -m venv venv
-Run source venv/Scripts/activate
-You should now be in venv, to install all dependencies, run pip install -r requirements.txt
-Make sure to update requirements.txt if intalling new dependencies by running pip freeze > requirements.txt
-Setting up python:
 Make sure you have python installed. You can check using ```python -v``` or ```python3 -v``` for mac. 
 
-Next install flask which will be used to link the backend and frontend. 
-Run ```pip install flask```(windows) or ```pip3 install flask```(mac). 
-
-For good measure also install CORS:
-```pip install flask-cors```
+VENV SETUP:
+Navigate to the server directory
+create venv by running ```python -m venv venv```
+Run ```source venv/Scripts/activate```
+You should now be in venv, to install all dependencies, run ```pip install -r requirements.txt```
+Make sure to update requirements.txt if intalling new dependencies by running ```pip freeze > requirements.txt```
 
 
 
