@@ -1,5 +1,5 @@
-from flask import Flask, Response, make_response, request, jsonify
-from mongoInterface import add
+from flask import Flask, Response, make_response, request, jsonify, json, dumps
+from mongoInterface import get_one_event_by_uid, add, delete
 
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 def submit_form():
     try:
         # Get data from user inupt form
-        perpetrator = request.form['Perpetrator']
+        perpetrator = request.form['perpetrator']
         summary = request.form['summary']
         date = request.form['date']
         location = request.form['location']
@@ -35,6 +35,47 @@ def submit_form():
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
 
+
+@app.route('/event/<string:id>', methods=['GET'])
+def getEvent(id):
+    try:
+        event = get_one_event_by_uid(id)
+        numOfEvents = len(event)
+        return get_method_output(json.loads(dumps(event)), numOfEvents)
+    
+    except Exception as e:
+        return make_response({"data": f"Error {e}"}, 500)
+
+
+@app.route('/event/<string:id>', methods=['DELETE'])
+def deleteEvent(id):
+    try:
+        
+
+        # Call pymongo delete function
+
+        deleted_count = delete(id)
+        if (deleted_count > 0):
+            res = make_response(
+                jsonify(
+                    {"message": f"Comment with id: {id} successfully deleted", "id": str(
+                        id)}
+                ), 200
+            )
+        else:
+            res = make_response(
+                jsonify(
+                    {"message": f"No comment with id: {id} found"}
+                ), 404
+            )
+
+        return res
+
+    except Exception as e:
+        return make_response({"data": f"Error {e}"})
+
+
+    
 
 def get_method_output(output, count):
     '''

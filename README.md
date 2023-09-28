@@ -18,6 +18,7 @@ VENV SETUP:
 Navigate to the server directory
 create venv by running ```python -m venv venv```
 Run ```source venv/Scripts/activate```
+Also make sure to be in the venv python interpreter by clicking your version in the bottom right corner and making sure the path is set to ```venv/Scripts/python```
 You should now be in venv, to install all dependencies, run ```pip install -r requirements.txt```
 Make sure to update requirements.txt if intalling new dependencies by running ```pip freeze > requirements.txt```
 
