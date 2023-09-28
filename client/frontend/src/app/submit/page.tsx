@@ -1,3 +1,4 @@
+'use clients'
 import React, { useState } from 'react';
 
 function SubmitPage() {
