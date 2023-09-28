@@ -17,7 +17,7 @@ def submit_form():
         how = request.form['how']
         # Deal with additional user inputted fields?
         additional_fields = request.form.get('additional_fields', {})
-        
+
         input_dict = {
             "perpetrator": perpetrator,
             "summary": summary,
@@ -34,7 +34,25 @@ def submit_form():
 
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
-    
+
+
+def get_method_output(output, count):
+    '''
+    This is a helper method which returns the output for the submission endpoint
+    based on how many submissions were found by the client's query.
+    '''
+    if count > 1:
+        return make_response(
+            jsonify(
+                {'message': f'{count} submissions were found', 'data': output}
+            ), 200
+        )
+    elif count == 1:
+        return make_response(
+            jsonify(
+                {'data': output}
+            ), 200
+        )
 
 
 if __name__ == '__main__':

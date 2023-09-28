@@ -3,6 +3,7 @@ import os
 from pymongo.mongo_client import MongoClient
 from dotenv import load_dotenv
 import datetime
+from bson.objectid import ObjectId
 
 
 def init_mongo():
@@ -29,8 +30,6 @@ def add(input_dict):
     Output: a status and the id of the inserted document.
     """
     db = init_mongo()
-
-    output = {}
 
     try:
         perpetrator = input_dict["perpetrator"]
@@ -76,6 +75,16 @@ Input: search parameters
 Output: formatted dicionary of the document if one was found that matches the search params
 """
 
+
+def get_one_event_by_uid(uid):
+    """
+    This method will try to find a document to match the uid
+    """
+    db = init_mongo()
+    query = {"_id": ObjectId(uid)}
+    return list(db.events.find(query))  # consume cursor and pass back as list
+
+
 # def get_all():
 """
 This method will return search for all documents that fit a certain query
@@ -97,11 +106,15 @@ Output: the status code of whether or not the udpate was successful
 """
 
 
-# def delete():
-"""
-This method will attempt to delete a document in the collection.
+def delete(uid):
+    """
+    This method will attempt to delete a document in the collection.
 
-Input: the id of the document to delete
-
-Output: the status code of whether or not the document was deleted or not.
-"""
+    Input: the id of the document to delete
+    Output: the status code of whether or not the document was deleted or not.
+    """
+    db = init_mongo()
+    events_collection = db.events
+    deleted_count = events_collection.delete_one(
+        {'_id': ObjectId(uid)}).deleted_count
+    return deleted_count
