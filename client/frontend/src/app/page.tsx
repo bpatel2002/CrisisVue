@@ -5,9 +5,6 @@ import MassShootingEvent from './components/massShootingEvent';
 
 export default function Home() {
   return (
-<<<<<<< Updated upstream
-    <div>Home Page</div>
-=======
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
@@ -196,6 +193,5 @@ export default function Home() {
         </a>
       </div>
     </main>
->>>>>>> Stashed changes
   )
 }

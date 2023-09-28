@@ -29,4 +29,4 @@ const MassShootingEvent: React.FC<MassShootingEventProps> = ({
   );
 };
 
-export default MassShootingEvent;
+export default MassShootingEvent; 
