@@ -1,9 +1,12 @@
+'use client'
 import React from 'react'
+import BarChart from './components/barchart'
 
 function page() {
   return (
-    <div>Posts</div>
-  )
+    <div><BarChart/></div>
+    
+  );
 }
 
 export default page
