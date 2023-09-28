@@ -82,7 +82,7 @@ def get_one_event_by_uid(uid):
     """
     db = init_mongo()
     query = {"_id": ObjectId(uid)}
-    return list(db.events.find(query))  # consume cursor and pass back as list
+    return list(db.Events.find(query))  # consume cursor and pass back as list
 
 
 # def get_all():
@@ -114,7 +114,8 @@ def delete(uid):
     Output: the status code of whether or not the document was deleted or not.
     """
     db = init_mongo()
-    events_collection = db.events
+    events_collection = db.Events
     deleted_count = events_collection.delete_one(
         {'_id': ObjectId(uid)}).deleted_count
+
     return deleted_count
