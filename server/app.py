@@ -2,9 +2,11 @@ from flask import Flask, Response, make_response, request, jsonify
 import json
 from mongoInterface import *
 from bson.json_util import dumps
-
+from flask import Flask
+from flask_cors import CORS
 app = Flask(__name__)
 
+CORS(app)
 
 # Endpoint to handle what happens when admin clicks submit button on form to add data
 @app.route('/submitForm', methods=['POST'])
