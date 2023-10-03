@@ -39,7 +39,7 @@ def add(input_dict):
         date = input_dict["date"]
         location = input_dict["location"]
         motive = input_dict["motive"]
-        how = input_dict["how"]
+        casualties = input_dict["casualties"]
         additional_fields = input_dict.get("additional_fields", {})
         date_submitted = str(datetime.datetime.now())
 
@@ -54,7 +54,7 @@ def add(input_dict):
         'date': date,
         'location': location,
         'motive': motive,
-        'how': how,
+        'casualties': casualties,
         'date_submitted': date_submitted
     }
 
@@ -139,7 +139,7 @@ Output: the status code of whether or not the udpate was successful
 
 def get_all_example():
     db = init_mongo()
-    docs = db.events.find()
+    docs = db.Events.find()
     return list(docs)
 
 
@@ -175,12 +175,14 @@ def parse_filters(filters):
 
 
 
-# event_document = {
-#         'event_name': "Sandy Hook Elementary",
-#         'perpetrator': "Adam Lanza",
-#         'summary': "Adam Lanza shot and killed 20 students and 6 adults at Sandy Hook Elementary",
-#         'date': "12/14/2012",
-#         'location': "Newtown Connecticut",
-#         'motive': "unknown",
-#         'how': "Adman Lanza utilized three guns, an ar-15, glock handgun, and sig-saur handgun"
-#     }
+event_document = {
+        'event_name': "Las Vegas Shooting",
+        'perpetrator': "Stephen Paddock",
+        'summary': "Stephen paddock opened fire at a crowd attending a music festival and fired more than 1000 bullets, killing 60 and injuring 413",
+        'date': "10/1/2017",
+        'location': "Las Vegas, NV",
+        'motive': "unknown",
+        'casualties': 60
+    }
+
+add(event_document)
