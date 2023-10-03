@@ -10,19 +10,42 @@ function SubmitPage() {
   const [image, setImage] = useState<File | null>(null);
   const [url, setUrl] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log({
-      perpetrator,
-      location,
-      summary,
-      date,
-      motive,
-      image,
-      url,
-    });
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  // Create a data object with the form data
+  const formData = new FormData();
+  formData.append('perpetrator', perpetrator);
+  formData.append('location', location);
+  formData.append('summary', summary);
+  formData.append('date', date);
+  formData.append('motive', motive);
+  if (image) {
+    formData.append('image', image);
+  }
+  formData.append('url', url);
+
+  try {
+    // Make a POST request using Axios
+    const response = await axios.post('https://example.com/api/submit', formData);
+
+    // Handle the response (you can display a success message, reset the form, etc.)
+    console.log('Submission successful:', response.data);
+
+    // Clear the form fields after successful submission (optional)
+    setPerpetrator('');
+    setLocation('');
+    setSummary('');
+    setDate('');
+    setMotive('');
+    setImage(null);
+    setUrl('');
+  } catch (error) {
+    // Handle errors (you can display an error message to the user)
+    console.error('Submission error:', error);
+  }
+};
+
 
   return (
     <div className="form-container">
