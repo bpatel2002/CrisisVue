@@ -4,6 +4,7 @@ from pymongo.mongo_client import MongoClient
 from dotenv import load_dotenv
 import datetime
 from bson.objectid import ObjectId
+import re
 
 
 def init_mongo():
@@ -32,6 +33,7 @@ def add(input_dict):
     db = init_mongo()
 
     try:
+        event_name = input_dict["event_name"]
         perpetrator = input_dict["perpetrator"]
         summary = input_dict["summary"]
         date = input_dict["date"]
@@ -46,6 +48,7 @@ def add(input_dict):
         return {"error": error_message}
 
     event_document = {
+        'event_name': event_name,
         'perpetrator': perpetrator,
         'summary': summary,
         'date': date,
@@ -85,14 +88,42 @@ def get_one_event_by_uid(uid):
     return list(db.Events.find(query))  # consume cursor and pass back as list
 
 
-# def get_all():
-"""
-This method will return search for all documents that fit a certain query
+def get_all(filters, event_name=None, date=None, location=None, limit=100):
+    """
+    This method will return search for all documents that fit a certain query
+    Input: a dict known as filters
+    Ouput: formatted dicionary containing all documents that were found which match the search params
+    """
+    db = init_mongo()
 
-Input: search parameters
+    find_params = parse_filters(filters)
 
-Ouput: formatted dicionary containing all documents that were found which match the search params
-"""
+    # searching for a specific event using these, otherwise the pipeline will try to match using a regex
+    if event_name:
+        find_params.update({'event_name': event_name})
+    elif date:
+        find_params.update({'date': date})
+    elif date:
+        find_params.update({'location': location})
+
+    pipeline = [
+        {
+            '$match': find_params
+        },
+        {
+            "$sort": {"ratio": 1}
+        },
+        {
+            '$sort': {
+                '_id': pymongo.DESCENDING
+            }
+        },
+        {
+            '$limit': limit
+        }
+    ]
+
+    return db.Events.aggregate(pipeline)
 
 
 # def update():
@@ -104,6 +135,12 @@ be updated.
 
 Output: the status code of whether or not the udpate was successful
 """
+
+
+def get_all_example():
+    db = init_mongo()
+    docs = db.events.find()
+    return list(docs)
 
 
 def delete(uid):
@@ -119,3 +156,31 @@ def delete(uid):
         {'_id': ObjectId(uid)}).deleted_count
 
     return deleted_count
+
+
+def parse_filters(filters):
+    if not filters:
+        return {}
+
+    # parse search and type
+    search_match = re.search(r'search:(\w+)', filters)
+    search_param = search_match.group(1) if search_match else None
+
+    # Search for search param in item name and comment, while also ensuring that type is of one that is specified
+    query_params = {}
+    if search_param:
+        query_params.update(
+            {'$or': [{'item_name': {'$regex': search_param, '$options': 'i'}}]})
+    return query_params
+
+
+
+# event_document = {
+#         'event_name': "Sandy Hook Elementary",
+#         'perpetrator': "Adam Lanza",
+#         'summary': "Adam Lanza shot and killed 20 students and 6 adults at Sandy Hook Elementary",
+#         'date': "12/14/2012",
+#         'location': "Newtown Connecticut",
+#         'motive': "unknown",
+#         'how': "Adman Lanza utilized three guns, an ar-15, glock handgun, and sig-saur handgun"
+#     }
