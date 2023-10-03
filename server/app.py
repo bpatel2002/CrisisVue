@@ -19,7 +19,7 @@ def submit_form():
         date = request.form['date']
         location = request.form['location']
         motive = request.form['motive']
-        how = request.form['how']
+        casualties = request.form['casualties']
         # Deal with additional user inputted fields?
         additional_fields = request.form.get('additional_fields', {})
 
@@ -30,7 +30,7 @@ def submit_form():
             "date": date,
             "location": location,
             "motive": motive,
-            "how": how,
+            "casualties": casualties,
             "additional_fields": additional_fields
         }
 
