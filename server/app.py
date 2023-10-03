@@ -1,5 +1,7 @@
-from flask import Flask, Response, make_response, request, jsonify, json, dumps
-from mongoInterface import get_one_event_by_uid, add, delete
+from flask import Flask, Response, make_response, request, jsonify
+import json
+from mongoInterface import *
+from bson.json_util import dumps
 
 app = Flask(__name__)
 
@@ -9,6 +11,7 @@ app = Flask(__name__)
 def submit_form():
     try:
         # Get data from user inupt form
+        event_name = request.form['name']
         perpetrator = request.form['perpetrator']
         summary = request.form['summary']
         date = request.form['date']
@@ -19,6 +22,7 @@ def submit_form():
         additional_fields = request.form.get('additional_fields', {})
 
         input_dict = {
+            "event_name": event_name,
             "perpetrator": perpetrator,
             "summary": summary,
             "date": date,
@@ -36,7 +40,7 @@ def submit_form():
         return make_response({"Error": f"Missing field: {e}"}, 500)
 
 
-@app.route('/event/<string:id>', methods=['GET'])
+@app.route('/events/<string:id>', methods=['GET'])
 def getEvent(id):
     try:
         event = get_one_event_by_uid(id)
@@ -45,9 +49,21 @@ def getEvent(id):
     
     except Exception as e:
         return make_response({"data": f"Error {e}"}, 500)
+    
+@app.route('/events', methods=['GET'])
+def getAllEvents():
+    try:
+        # call pymongo code to query all events in the database
+        events = get_all_example()
+        numOfEvents = len(events)
+        return get_method_output(json.loads(dumps(events)), numOfEvents)
 
 
-@app.route('/event/<string:id>', methods=['DELETE'])
+    except Exception as e:
+        return make_response({"data": f"Error {e}"}, 500)
+
+
+@app.route('/events/<string:id>', methods=['DELETE'])
 def deleteEvent(id):
     try:
         
@@ -58,34 +74,47 @@ def deleteEvent(id):
         if (deleted_count > 0):
             res = make_response(
                 jsonify(
-                    {"message": f"Comment with id: {id} successfully deleted", "id": str(
+                    {"message": f"Event with id: {id} successfully deleted", "id": str(
                         id)}
                 ), 200
             )
         else:
             res = make_response(
                 jsonify(
-                    {"message": f"No comment with id: {id} found"}
+                    {"message": f"No event with id: {id} found"}
                 ), 404
             )
 
         return res
 
     except Exception as e:
-        return make_response({"data": f"Error {e}"})
+        return make_response({"data": f"Error {e}"}, 500)
+
+
+@app.route('/events/<string:id>', methods=['PUT'])
+def updateEvent(id):
+
+    try:
+        # Call pymongo update code
+        update(id)
+
+
+
+    except Exception as e:
+        return make_response({"data": f"Error {e}"}, 500)
 
 
     
 
 def get_method_output(output, count):
     '''
-    This is a helper method which returns the output for the submission endpoint
-    based on how many submissions were found by the client's query.
+    This is a helper method which returns the output for the event endpoint
+    based on how many events were found by the client's query.
     '''
     if count > 1:
         return make_response(
             jsonify(
-                {'message': f'{count} submissions were found', 'data': output}
+                {'message': f'{count} events were found', 'data': output}
             ), 200
         )
     elif count == 1:

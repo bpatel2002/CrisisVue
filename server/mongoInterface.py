@@ -139,7 +139,7 @@ Output: the status code of whether or not the udpate was successful
 
 def get_all_example():
     db = init_mongo()
-    docs = db.events.find()
+    docs = db.Events.find()
     return list(docs)
 
 
