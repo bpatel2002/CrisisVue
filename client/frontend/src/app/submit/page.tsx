@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import './SubmitPage.css'
 
 function SubmitPage() {
   const [perpetrator, setPerpetrator] = useState('');
