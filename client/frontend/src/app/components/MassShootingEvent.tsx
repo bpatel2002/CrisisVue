@@ -1,4 +1,4 @@
-// components/MassShootingEvent.tsx
+// // components/MassShootingEvent.tsx
 
 import React from 'react';
 
@@ -30,3 +30,4 @@ const MassShootingEvent: React.FC<MassShootingEventProps> = ({
 };
 
 export default MassShootingEvent; 
+

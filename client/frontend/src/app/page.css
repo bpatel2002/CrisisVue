@@ -1,0 +1,36 @@
+/* Page.css */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .section {
+    width: 80%;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+  }
+  
+  /* Welcome + Search + Image on Right*/
+  .section1 {
+    background-color: #f0f0f0;
+  }
+  
+  /* Recent Events + Search */
+  .section2 {
+    background-color: #f0f0f0;
+  }
+  
+  /* Mass Shooting Statstics */
+  .section3 {
+    background-color: #f0f0f0;
+  }
+
+  /* Mass Shooting Statstics */
+  .section4{
+    background-color: #f0f0f0;
+  }
+
+ 
