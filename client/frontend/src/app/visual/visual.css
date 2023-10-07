@@ -1,0 +1,44 @@
+.eventList{
+    height: 20em;
+    width: 20em;
+    overflow-y: auto;
+}
+.eventCard {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+
+}
+
+.eventDetails {
+    flex: 1;
+}
+
+.eventTitle {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.eventDescription {
+    margin-bottom: 10px;
+}
+
+.eventFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.location{
+    
+}
+
+
+
+.eventFooter > div {
+    display: flex;
+    align-items: center;
+}
