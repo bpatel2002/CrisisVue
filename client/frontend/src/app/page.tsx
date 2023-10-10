@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import styles from './page.module.css'
 import React from 'react';
-import './page.css'; 
+import './page.css';
 import MassShootingEvent from './components/massShootingEvent';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -39,26 +39,22 @@ export default function Home() {
   //       </p>
   //     </div>
 
- 
+
   //   </main>
   // )
- 
+
   return (
     <div className="page-container">
-      <div className="section section1">
-        <div className="section-left">
-          <h2>Welcome to the Mass Shooting Events Digital Library</h2>
-        </div>
-        <div className="section-right">
-        <img
-            src="/map.jpg" 
-            alt="Map"
-            className="map-image"
-          />
-        </div>
-      </div>
-      <div className="section section2">
-        {/* <h2>Section 2</h2> */}
+      <section className="search-section">
+        <h2>Welcome to the Mass Shooting Events Digital Library</h2>
+        <p>Explore important statistics and information about mass shooting events.</p>
+        <input type="text" placeholder="Search..." />
+        <button>Search</button>
+      </section>
+
+      <section className="recent-events">
+        <h2>Recent Mass Shootings</h2>
+        {/* This can be a component */}
         <div className={styles.grid}>
           {events.map((event_document, index) => (
             <MassShootingEvent
@@ -71,15 +67,19 @@ export default function Home() {
             />
           ))}
         </div>
-      </div>
-      <div className="section section3">
+      </section>
+
+      <section className="statistics">
         <h2>Mass Shooting Statistics</h2>
-        <p>//content</p>
-      </div>
-      <div className="section section4">
+        {/* Graph here */}
+      </section>
+
+      <section className="advanced-search">
         <h2>Search Mass Shootings</h2>
-        <p>//content</p>
-      </div>
+        <input type="date" placeholder="Start Date" />
+        <input type="text" placeholder="Location" />
+        <button>Search</button>
+      </section>
     </div>
   );
 };
