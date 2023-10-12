@@ -28,7 +28,7 @@ function EventList() {
 
   return (
     <div>
-      <h1>Recent Events</h1>
+      {/* <h1>Recent Events</h1> */}
       {events.map((event_document, index) => (
         <MassShootingEvent
           key={index}

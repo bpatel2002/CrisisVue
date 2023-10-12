@@ -54,19 +54,7 @@ export default function Home() {
 
       <section className="recent-events">
         <h2>Recent Mass Shootings</h2>
-        {/* This can be a component */}
-        <div className={styles.grid}>
-          {events.map((event_document, index) => (
-            <MassShootingEvent
-              key={index}
-              event={event_document.event_name}
-              date={event_document.date}
-              perpetrator={event_document.perpetrator}
-              location={event_document.location}
-              numVictims={event_document.casualties}
-            />
-          ))}
-        </div>
+        <MassShootingEvent />
       </section>
 
       <section className="statistics">
@@ -82,5 +70,6 @@ export default function Home() {
       </section>
     </div>
   );
+
 };
 
