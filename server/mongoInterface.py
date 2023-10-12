@@ -88,24 +88,17 @@ def get_one_event_by_uid(uid):
     return list(db.Events.find(query))  # consume cursor and pass back as list
 
 
-def get_all(filters, event_name=None, date=None, location=None, limit=100):
+def get_all(filters=None, event_name=None, date=None, location=None, limit=100):
     """
-    This method will return search for all documents that fit a certain query
-    Input: a dict known as filters
-    Ouput: formatted dicionary containing all documents that were found which match the search params
+    Get documents that match the filters
     """
+    # Assuming init_mongo is a function that initializes a connection to your MongoDB instance and returns a database object.
     db = init_mongo()
 
-    find_params = parse_filters(filters)
+    # Parse the filters to get the MongoDB query parameters.
+    find_params = parse_filters(filters, event_name, date, location)
 
-    # searching for a specific event using these, otherwise the pipeline will try to match using a regex
-    if event_name:
-        find_params.update({'event_name': event_name})
-    elif date:
-        find_params.update({'date': date})
-    elif date:
-        find_params.update({'location': location})
-
+    # Define the pipeline for aggregation.
     pipeline = [
         {
             '$match': find_params
@@ -123,6 +116,7 @@ def get_all(filters, event_name=None, date=None, location=None, limit=100):
         }
     ]
 
+    # Run the aggregation pipeline and return the results.
     return db.Events.aggregate(pipeline)
 
 
@@ -158,29 +152,19 @@ def delete(uid):
     return deleted_count
 
 
-def parse_filters(filters):
-    if not filters:
-        return {}
-
-    # parse search and type
-    search_match = re.search(r'search:(\w+)', filters)
-    search_param = search_match.group(1) if search_match else None
-
-    # Search for search param in item name and comment, while also ensuring that type is of one that is specified
+def parse_filters(filters, event_name=None, date=None, location=None):
     query_params = {}
-    if search_param:
+    if filters:
+        # Search for search param in item name, or any other field you want to search in
         query_params.update(
-            {'$or': [{'item_name': {'$regex': search_param, '$options': 'i'}}]})
+            {'$or': [{'event_name': {'$regex': filters, '$options': 'i'}}]})
+
+    # Additional search parameters
+    if event_name:
+        query_params.update({'event_name': event_name})
+    if date:
+        query_params.update({'date': date})
+    if location:
+        query_params.update({'location': location})
+
     return query_params
-
-
-
-# event_document = {
-#         'event_name': "Sandy Hook Elementary",
-#         'perpetrator': "Adam Lanza",
-#         'summary': "Adam Lanza shot and killed 20 students and 6 adults at Sandy Hook Elementary",
-#         'date': "12/14/2012",
-#         'location': "Newtown Connecticut",
-#         'motive': "unknown",
-#         'how': "Adman Lanza utilized three guns, an ar-15, glock handgun, and sig-saur handgun"
-#     }
