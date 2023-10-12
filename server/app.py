@@ -13,15 +13,16 @@ CORS(app)
 def submit_form():
     try:
         # Get data from user inupt form
-        event_name = request.form['name']
-        perpetrator = request.form['perpetrator']
-        summary = request.form['summary']
-        date = request.form['date']
-        location = request.form['location']
-        motive = request.form['motive']
-        casualties = request.form['casualties']
+        details = request.json
+        event_name = details['name']
+        perpetrator = details['perpetrator']
+        summary = details['summary']
+        date = details['date']
+        location = details['location']
+        motive = details['motive']
+        casualties = details['casualties']
         # Deal with additional user inputted fields?
-        additional_fields = request.form.get('additional_fields', {})
+        additional_fields = details['additional_fields']
 
         input_dict = {
             "event_name": event_name,
@@ -41,6 +42,19 @@ def submit_form():
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
 
+@app.route('/events', methods=['GET'])
+def searchEvents():
+    filters = request.args.get('filters', None)
+    date = request.args.get('date', None)
+    location = request.args.get('location', None)
+
+    try:
+        results = get_all(filters=filters, date=date, location=location)
+        results = list(results)
+        return jsonify(json.loads(dumps(results))), 200
+
+    except Exception as e:
+        return make_response({"data": f"Error {e}"}, 500)
 
 @app.route('/events/<string:id>', methods=['GET'])
 def getEvent(id):
