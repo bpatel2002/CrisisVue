@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import './SubmitPage.css'
+import './SubmitPage.css';
+import axios from 'axios'
 
 function SubmitPage() {
   const [perpetrator, setPerpetrator] = useState('');
@@ -11,20 +12,30 @@ function SubmitPage() {
   const [image, setImage] = useState<File | null>(null);
   const [url, setUrl] = useState('');
 
+
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   // Create a data object with the form data
-  const formData = new FormData();
-  formData.append('perpetrator', perpetrator);
-  formData.append('location', location);
-  formData.append('summary', summary);
-  formData.append('date', date);
-  formData.append('motive', motive);
-  if (image) {
-    formData.append('image', image);
-  }
-  formData.append('url', url);
+  const formData = {
+    "perpetrator": perpetrator,
+    "location": location,
+    "summary": summary,
+    "data": date,
+    "motive": motive,
+    "url": url,
+  };
+
+  // const formData = new FormData();
+  // formData.append('perpetrator', perpetrator);
+  // formData.append('location', location);
+  // formData.append('summary', summary);
+  // formData.append('date', date);
+  // formData.append('motive', motive);
+  // if (image) {
+  //   formData.append('image', image);
+  // }
+  // formData.append('url', url);
 
   try {
     // Make a POST request using Axios
