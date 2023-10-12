@@ -39,7 +39,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   try {
     // Make a POST request using Axios
-    const response = await axios.post('https://example.com/api/submit', formData);
+    const response = await axios.post('http://127.0.0.1:5000', formData);
 
     // Handle the response (you can display a success message, reset the form, etc.)
     console.log('Submission successful:', response.data);
