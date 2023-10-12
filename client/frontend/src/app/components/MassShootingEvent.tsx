@@ -1,6 +1,6 @@
 // // components/MassShootingEvent.tsx
 
-import React from 'react';
+import React from "react";
 
 interface MassShootingEventProps {
   event: string;
@@ -8,26 +8,7 @@ interface MassShootingEventProps {
   perpetrator: string;
   location: string;
   numVictims: number;
-
 }
-
-// const MassShootingEvent: React.FC<MassShootingEventProps> = ({
-//   event,
-//   date,
-//   perpetrator,
-//   location,
-//   numVictims,
-// }) => {
-//   return (
-//     <div>
-//       <h2>{event}</h2>
-//       <p>Date: {date}</p>
-//       <p>Perpetrator: {perpetrator}</p>
-//       <p>Location: {location}</p>
-//       <p>Number of Victims: {numVictims}</p>
-//     </div>
-//   );
-// };
 
 function MassShootingEvent({ event, date, perpetrator, location, numVictims }) {
   return (
@@ -41,5 +22,4 @@ function MassShootingEvent({ event, date, perpetrator, location, numVictims }) {
   );
 }
 
-export default MassShootingEvent; 
-
+export default MassShootingEvent;

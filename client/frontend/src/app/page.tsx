@@ -1,60 +1,57 @@
-'use client';
+"use client";
 
-import Image from 'next/image'
-import styles from './page.module.css'
-import React from 'react';
-import './page.css';
-import MassShootingEvent from './components/massShootingEvent';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import Image from "next/image";
+import styles from "./page.module.css";
+import React from "react";
+import "./page.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import MassShootingEvent from "./components/MassShootingEvent";
 
 export default function Home() {
-
-  const [events, setEvents] = useState<any[]>([])
+  const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
     console.log("inside use effect");
     // Make a GET request to your API endpoint using Axios
-    axios.get('http://127.0.0.1:5000/events')
+    axios
+      .get("http://127.0.0.1:5000/events")
       .then((response) => {
         // Assuming your API returns an array of event documents
         console.log("inside get lets gooo");
-        setEvents(response.data.data);
+        setEvents(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching events:', error);
+        console.error("Error fetching events:", error);
       });
   }, []);
 
-  console.log("outside use effect")
-
-
-  // return (
-  //   <main className={styles.main}>
-  //     <div className={styles.description}>
-  //       <p>
-  //         Get started by editing&nbsp;
-  //         <code className={styles.code}>src/app/page.tsx</code>
-  //       </p>
-  //     </div>
-
-
-  //   </main>
-  // )
+  console.log("outside use effect");
 
   return (
     <div className="page-container">
       <section className="search-section">
         <h2>Welcome to the Mass Shooting Events Digital Library</h2>
-        <p>Explore important statistics and information about mass shooting events.</p>
+        <p>
+          Explore important statistics and information about mass shooting
+          events.
+        </p>
         <input type="text" placeholder="Search..." />
         <button>Search</button>
       </section>
 
       <section className="recent-events">
         <h2>Recent Mass Shootings</h2>
-        <MassShootingEvent />
+        {events.map((event, index) => (
+          <MassShootingEvent
+            key={index} // Ensure each component maintains a unique key for optimal rendering performance
+            event={event.event_name}
+            date={event.date || "N/A"}
+            perpetrator={event.perpetrator || "N/A"}
+            location={event.location || "N/A"}
+            numVictims={event.casualties || 0}
+          />
+        ))}
       </section>
 
       <section className="statistics">
@@ -70,6 +67,4 @@ export default function Home() {
       </section>
     </div>
   );
-
-};
-
+}
