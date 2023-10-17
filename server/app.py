@@ -9,6 +9,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Endpoint to handle what happens when admin clicks submit button on form to add data
+
+
 @app.route('/submitForm', methods=['POST'])
 def submit_form():
     try:
@@ -37,10 +39,11 @@ def submit_form():
 
         res = add(input_dict)
 
-        return make_response(res, 200)
+        return make_response({"message": "succesfully added", "new_object_id": f"{res}"}, 200)
 
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
+
 
 @app.route('/events', methods=['GET'])
 def searchEvents():
@@ -56,16 +59,18 @@ def searchEvents():
     except Exception as e:
         return make_response({"data": f"Error {e}"}, 500)
 
+
 @app.route('/events/<string:id>', methods=['GET'])
 def getEvent(id):
     try:
         event = get_one_event_by_uid(id)
         numOfEvents = len(event)
         return get_method_output(json.loads(dumps(event)), numOfEvents)
-    
+
     except Exception as e:
         return make_response({"data": f"Error {e}"}, 500)
-    
+
+
 @app.route('/events', methods=['GET'])
 def getAllEvents():
     try:
@@ -74,7 +79,6 @@ def getAllEvents():
         numOfEvents = len(events)
         return get_method_output(json.loads(dumps(events)), numOfEvents)
 
-
     except Exception as e:
         return make_response({"data": f"Error {e}"}, 500)
 
@@ -82,7 +86,6 @@ def getAllEvents():
 @app.route('/events/<string:id>', methods=['DELETE'])
 def deleteEvent(id):
     try:
-        
 
         # Call pymongo delete function
 
@@ -114,13 +117,9 @@ def updateEvent(id):
         # Call pymongo update code
         update(id)
 
-
-
     except Exception as e:
         return make_response({"data": f"Error {e}"}, 500)
 
-
-    
 
 def get_method_output(output, count):
     '''

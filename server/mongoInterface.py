@@ -39,7 +39,7 @@ def add(input_dict):
         date = input_dict["date"]
         location = input_dict["location"]
         motive = input_dict["motive"]
-        how = input_dict["how"]
+        casualties = input_dict["casualties"]
         additional_fields = input_dict.get("additional_fields", {})
         date_submitted = str(datetime.datetime.now())
 
@@ -54,18 +54,15 @@ def add(input_dict):
         'date': date,
         'location': location,
         'motive': motive,
-        'how': how,
+        'casualties': casualties,
         'date_submitted': date_submitted
     }
 
     event_document.update(additional_fields)
 
-    new_event_id = db.Events.insert_one(event_document)
+    new_event_id = db.Events.insert_one(event_document).inserted_id
 
-    return {
-        "message": "inserted successfully",
-        "new_event_id": new_event_id
-    }
+    return new_event_id
 
 
 # def get_one():
