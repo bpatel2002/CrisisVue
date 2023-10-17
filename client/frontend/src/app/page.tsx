@@ -10,18 +10,27 @@ import MassShootingEvent from "./components/MassShootingEvent";
 
 export default function Home() {
   const [events, setEvents] = useState<any[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [displaySearchResults, setDisplaySearchReults] = useState(false);
+
   const [searchDate, setSearchDate] = useState<string | null>(null);
   const [searchLocation, setSearchLocation] = useState<string | null>(null);
 
   const fetchEvents = (filters?: string, date?: string, location?: string) => {
+    if (filters != "") {
+      setSearchDate("");
+      setSearchLocation("");
+      date = undefined;
+      location = undefined;
+    }
+
     axios
       .get("http://127.0.0.1:5000/events", {
         params: {
           filters: filters || undefined,
           date: date || undefined,
-          location: location || undefined
-        }
+          location: location || undefined,
+        },
       })
       .then((response) => {
         setEvents(response.data);
@@ -38,6 +47,7 @@ export default function Home() {
 
   const handleSearch = () => {
     fetchEvents(searchQuery, searchDate, searchLocation);
+    setDisplaySearchReults(true);
   };
 
   return (
@@ -48,26 +58,46 @@ export default function Home() {
           Explore important statistics and information about mass shooting
           events.
         </p>
-        <input type="text" 
-          placeholder="Search..." 
+        <input
+          type="text"
+          placeholder="Search..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} />
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <button onClick={handleSearch}>Search</button>
       </section>
 
-      <section className="recent-events">
-        <h2>Recent Mass Shootings</h2>
-        {events.map((event, index) => (
-          <MassShootingEvent
-            key={index} // Ensure each component maintains a unique key for optimal rendering performance
-            event={event.event_name}
-            date={event.date || "N/A"}
-            perpetrator={event.perpetrator || "N/A"}
-            location={event.location || "N/A"}
-            numVictims={event.casualties || 0}
-          />
-        ))}
-      </section>
+      {!displaySearchResults && (
+        <section className="recent-events">
+          <h2>Recent Mass Shootings</h2>
+          {events.map((event, index) => (
+            <MassShootingEvent
+              key={index} // Ensure each component maintains a unique key for optimal rendering performance
+              event={event.event_name}
+              date={event.date || "N/A"}
+              perpetrator={event.perpetrator || "N/A"}
+              location={event.location || "N/A"}
+              numVictims={event.casualties || 0}
+            />
+          ))}
+        </section>
+      )}
+
+      {displaySearchResults && (
+        <section className="recent-events">
+          <h2>Search Results: </h2>
+          {events.map((event, index) => (
+            <MassShootingEvent
+              key={index} // Ensure each component maintains a unique key for optimal rendering performance
+              event={event.event_name}
+              date={event.date || "N/A"}
+              perpetrator={event.perpetrator || "N/A"}
+              location={event.location || "N/A"}
+              numVictims={event.casualties || 0}
+            />
+          ))}
+        </section>
+      )}
 
       <section className="statistics">
         <h2>Mass Shooting Statistics</h2>
@@ -76,15 +106,15 @@ export default function Home() {
 
       <section className="advanced-search">
         <h2>Search Mass Shootings</h2>
-        <input 
+        <input
           type="date"
-          value={searchDate || ''}
+          value={searchDate || ""}
           onChange={(e) => setSearchDate(e.target.value)}
         />
-        <input 
-          type="text" 
+        <input
+          type="text"
           placeholder="Location"
-          value={searchLocation || ''}
+          value={searchLocation || ""}
           onChange={(e) => setSearchLocation(e.target.value)}
         />
         <button onClick={handleSearch}>Search</button>
