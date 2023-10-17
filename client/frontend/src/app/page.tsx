@@ -10,19 +10,35 @@ import MassShootingEvent from "./components/MassShootingEvent";
 
 export default function Home() {
   const [events, setEvents] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchDate, setSearchDate] = useState<string | null>(null);
+  const [searchLocation, setSearchLocation] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Make a GET request to your API endpoint using Axios
+  const fetchEvents = (filters?: string, date?: string, location?: string) => {
     axios
-      .get("http://127.0.0.1:5000/events")
+      .get("http://127.0.0.1:5000/events", {
+        params: {
+          filters: filters || undefined,
+          date: date || undefined,
+          location: location || undefined
+        }
+      })
       .then((response) => {
-        // Assuming your API returns an array of event documents
         setEvents(response.data);
       })
       .catch((error) => {
         console.error("Error fetching events:", error);
       });
+  };
+
+  useEffect(() => {
+    // Make a GET request to your API endpoint using Axios
+    fetchEvents();
   }, []);
+
+  const handleSearch = () => {
+    fetchEvents(searchQuery, searchDate, searchLocation);
+  };
 
   return (
     <div className="page-container">
@@ -32,8 +48,11 @@ export default function Home() {
           Explore important statistics and information about mass shooting
           events.
         </p>
-        <input type="text" placeholder="Search..." />
-        <button>Search</button>
+        <input type="text" 
+          placeholder="Search..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)} />
+        <button onClick={handleSearch}>Search</button>
       </section>
 
       <section className="recent-events">
@@ -57,9 +76,18 @@ export default function Home() {
 
       <section className="advanced-search">
         <h2>Search Mass Shootings</h2>
-        <input type="date" placeholder="Start Date" />
-        <input type="text" placeholder="Location" />
-        <button>Search</button>
+        <input 
+          type="date"
+          value={searchDate || ''}
+          onChange={(e) => setSearchDate(e.target.value)}
+        />
+        <input 
+          type="text" 
+          placeholder="Location"
+          value={searchLocation || ''}
+          onChange={(e) => setSearchLocation(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
       </section>
     </div>
   );
