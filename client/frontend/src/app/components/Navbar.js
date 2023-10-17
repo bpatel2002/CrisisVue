@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -8,7 +8,7 @@ import NavItem from "./NavItem";
 const MENU_LIST = [
   { text: "Home", href: "/" },
   { text: "Visualization", href: "../visual" },
-  { text: "Sign In", href: "/contact" },
+  { text: "Submit", href: "/submit" },
 ];
 const Navbar = () => {
   const [navActive, setNavActive] = useState(null);
@@ -18,9 +18,7 @@ const Navbar = () => {
     <header>
       <nav className={`nav`}>
         <Link href={"/"}>
-          
-            <Logo/>
-         
+          <Logo />
         </Link>
         <div
           onClick={() => setNavActive(!navActive)}

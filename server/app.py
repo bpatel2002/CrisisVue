@@ -11,7 +11,7 @@ CORS(app)
 # Endpoint to handle what happens when admin clicks submit button on form to add data
 
 
-@app.route('/submitForm', methods=['POST'])
+@app.route('/events', methods=['POST'])
 def submit_form():
     try:
         # Get data from user inupt form

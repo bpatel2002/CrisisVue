@@ -1,65 +1,64 @@
-'use client';
-import React, { useState } from 'react';
-import './SubmitPage.css';
-import axios from 'axios'
+"use client";
+import React, { useState } from "react";
+import "./SubmitPage.css";
+import axios from "axios";
 
 function SubmitPage() {
-  const [name, setName] = useState('');
-  const [perpetrator, setPerpetrator] = useState('');
-  const [summary, setSummary] = useState('');
-  const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [motive, setMotive] = useState('');
-  const [casualties, setCasualties] = useState('');
+  const [name, setName] = useState("");
+  const [perpetrator, setPerpetrator] = useState("");
+  const [summary, setSummary] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [motive, setMotive] = useState("");
+  const [casualties, setCasualties] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    // Create a data object with the form data
+    const formData = {
+      name: name,
+      perpetrator: perpetrator,
+      summary: summary,
+      date: date,
+      location: location,
+      motive: motive,
+      casualties: casualties,
+      additional_fields: url,
+    };
 
-  // Create a data object with the form data
-  const formData = {
-    name: name,
-    perpetrator: perpetrator,
-    summary: summary,
-    date: date,
-    location: location,
-    motive: motive,
-    casualties: casualties,
-    additional_fields: url,
+    try {
+      // Make a POST request using Axios
+      const response = await axios.post(
+        "http://127.0.0.1:5000/events",
+        formData
+      );
+
+      // Handle the response (you can display a success message, reset the form, etc.)
+      console.log("Submission successful:", response.data);
+
+      // Clear the form fields after successful submission (optional)
+      setName("");
+      setPerpetrator("");
+      setSummary("");
+      setDate("");
+      setLocation("");
+      setMotive("");
+      setCasualties("");
+      setImage(null);
+      setUrl("");
+    } catch (error) {
+      // Handle errors (you can display an error message to the user)
+      console.error("Submission error:", error);
+    }
   };
-
-
-  try {
-    // Make a POST request using Axios
-    const response = await axios.post('http://127.0.0.1:5000/submitForm', formData);
-
-    // Handle the response (you can display a success message, reset the form, etc.)
-    console.log('Submission successful:', response.data);
-
-    // Clear the form fields after successful submission (optional)
-    setName('');
-    setPerpetrator('');
-    setSummary('');
-    setDate('');
-    setLocation('');
-    setMotive('');
-    setCasualties('');
-    setImage(null);
-    setUrl('');
-  } catch (error) {
-    // Handle errors (you can display an error message to the user)
-    console.error('Submission error:', error);
-  }
-};
-
 
   return (
     <div className="form-container">
       <h1>Submit Information</h1>
       <form onSubmit={handleSubmit}>
-
         <label htmlFor="name">name:</label>
         <input
           type="text"
@@ -82,7 +81,6 @@ const handleSubmit = async (e: React.FormEvent) => {
         />
         <br />
 
-       
         <label htmlFor="summary">Summary:</label>
         <textarea
           id="summary"
@@ -164,4 +162,3 @@ const handleSubmit = async (e: React.FormEvent) => {
 }
 
 export default SubmitPage;
-

@@ -12,21 +12,17 @@ export default function Home() {
   const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
-    console.log("inside use effect");
     // Make a GET request to your API endpoint using Axios
     axios
       .get("http://127.0.0.1:5000/events")
       .then((response) => {
         // Assuming your API returns an array of event documents
-        console.log("inside get lets gooo");
         setEvents(response.data);
       })
       .catch((error) => {
         console.error("Error fetching events:", error);
       });
   }, []);
-
-  console.log("outside use effect");
 
   return (
     <div className="page-container">
