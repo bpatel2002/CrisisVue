@@ -5,9 +5,11 @@ import axios from 'axios'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import'./visual.css'
+import { OrganizeImportsMode } from 'typescript';
 function page() {
   const [events, setEvents] = useState([]);
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [originalChartData, setOriginalChartData] = useState([]);
 
 
 const handleEventSelection = (event) => {
@@ -64,83 +66,60 @@ useEffect(() => {
 
           const labels = fetchedEvents.map(event => event.event_name);
           const casualties = fetchedEvents.map(event => event.casualties);
-
-          setChartData({
-              labels: labels,
-              datasets: [
-                  {
-                      label: 'Casualties',
-                      data: casualties,
-                      backgroundColor: [
-                          'rgba(234, 99, 132, 0.2)',
-                          'rgba(54, 162, 235, 0.2)',
-                      ],
-                      borderColor: [
-                          'rgba(255, 99, 132, 1)',
-                          'rgba(54, 162, 235, 1)',
-                      ],
-                      borderWidth: 1,
-                  },
-              ],
-          });
+          const chartDatad = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Casualties',
+                    data: casualties,
+                    backgroundColor: [
+                        'rgba(234, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                    borderWidth: 1,
+                },
+            ],
+        };
+          setChartData(chartDatad);
+          
+          setOriginalChartData(chartDatad);
       });   
 }, []);
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:5000/events")
-  //     .then(response => {
-  //       setEvents(response.data.data);
-
-  //     })   
-  // }, []);
-  // const labels = events.map(event => event.event_name);
-  // const casualties = events.map(event => event.casualties);
-  // const data = {
-  //   labels: labels,
-  //   datasets: [
-  //     {
-  //       label: 'Casualties',
-  //       data: casualties,
-  //       backgroundColor: [
-  //         'rgba(234, 99, 132, 0.2)',
-  //         'rgba(54, 162, 235, 0.2)',
-
-  //       ],
-  //       borderColor: [
-  //         'rgba(255, 99, 132, 1)',
-  //         'rgba(54, 162, 235, 1)',
-  //       ],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
-
-  // const [chartData, setChartData] = useState(data);
+const resetChart = () => {
+    setChartData(originalChartData);
+}
 
   return (
     <>
-    <div style={{display: 'flex', gap: '20px', marginTop: '2em'}}>
-    <div style = {{height: '20em', width: '40em'}}><BarChart chartData={chartData}/></div>
-    <div className= "eventList">
-            {events.map((event, index) => (
-                <div key={index} className={`eventCard ${selectedEvents.includes(event) ? 'selected' : ''}`}
-                 onClick={() => handleEventSelection(event)}
-                >
-                    <div className="eventDetails">
-                        <div className="eventTitle">{event.event_name}</div>
-                        <div className="eventDate">Date: {event.date}</div>
-                        <div className="eventDescription">{event.summary}</div>
-                        <div className='location'>Location: {event.location}</div>
-                        <div className="eventFooter">
 
-                        </div>
-                    </div>
+        <div style={{display: 'flex', gap: '20px', marginTop: '2em'}}>
+            <div style = {{height: '20em', width: '40em'}}><BarChart chartData={chartData}/>
+            </div>
+            <div className='eventlistWrapper'>
+                <div className= "eventList">
+                    {events.map((event, index) => (
+                        <div key={index} className={`eventCard ${selectedEvents.includes(event) ? 'selected' : ''}`}
+                        onClick={() => handleEventSelection(event)}
+                        >
+                            <div className="eventDetails">
+                                <div className="eventTitle">{event.event_name}</div>
+                                <div className="eventDate">Date: {event.date}</div>
+                                <div className="eventDescription">{event.summary}</div>
+                                <div className='location'>Location: {event.location}</div>
+                                <div className="eventFooter"></div>
+                            </div>
+                        </div>))}
                 </div>
-            ))}
-            
+                <button class = "button-9" onClick={handleCompare}>Compare</button>
+                <button style = {{float: "right"}} class = "button-9" onClick={resetChart}>Reset</button>
+            </div>
         </div>
-        <button onClick={handleCompare}>Compare</button>
-    </div>
+    
     </>
   );
 }
