@@ -22,7 +22,8 @@ const LoginPage: React.FC = () => {
         if (response.data.authenticated) {
           // Redirect to the URL provided by the server
           window.location.href = response.data.redirectURL;
-        } else {
+        } 
+        else {
           alert('Login failed. Please check your credentials.');
         }
       })
