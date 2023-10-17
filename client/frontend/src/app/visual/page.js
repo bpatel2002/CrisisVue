@@ -59,7 +59,7 @@ const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 useEffect(() => {
   axios.get("http://localhost:5000/events")
       .then(response => {
-          const fetchedEvents = response.data.data;
+          const fetchedEvents = response.data;
           setEvents(fetchedEvents);
 
           const labels = fetchedEvents.map(event => event.event_name);
