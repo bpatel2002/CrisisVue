@@ -140,5 +140,33 @@ def get_method_output(output, count):
         )
 
 
+@app.route('/login', methods=['POST'])
+def authentication():
+    try:
+        loginData = request.json
+        inUsername = loginData['username']
+        inPassword = loginData['password']
+
+        redirData = {
+            "authenticated": False,
+            "redirectURL": "http://localhost:3000/submit",
+        }
+
+        if inUsername == "admin" and inPassword == "12345":
+            redirData["authenticated"] = True
+            return make_response(
+                jsonify (redirData),
+                200
+            )
+        else:
+            redirData["redirectURL"] = "NULL"
+            return make_response(
+                jsonify (redirData),
+                200
+            )
+
+    except KeyError as e:
+        return make_response({"Error": f"Missing field: {e}"}, 500)
+
 if __name__ == '__main__':
     app.run()
