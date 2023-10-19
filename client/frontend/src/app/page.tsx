@@ -73,6 +73,7 @@ export default function Home() {
           {events.map((event, index) => (
             <MassShootingEvent
               key={index} // Ensure each component maintains a unique key for optimal rendering performance
+              id = {event._id.$oid}
               event={event.event_name}
               date={event.date || "N/A"}
               perpetrator={event.perpetrator || "N/A"}
@@ -89,6 +90,7 @@ export default function Home() {
           {events.map((event, index) => (
             <MassShootingEvent
               key={index} // Ensure each component maintains a unique key for optimal rendering performance
+              id = {event._id.$oid}
               event={event.event_name}
               date={event.date || "N/A"}
               perpetrator={event.perpetrator || "N/A"}

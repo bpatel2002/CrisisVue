@@ -55,13 +55,13 @@ button:hover {
 
 
 .event-card {
-  padding: 15px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s, box-shadow 0.3s;
+  padding: 20px;
+  border: 1px solid #ddd; /* Light grey border */
+  border-radius: 5px; /* Rounded borders */
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out; /* Adds a smooth shadow and transform transition */
+  cursor: pointer; /* Indicates the item is clickable */
+  background-color: #ffffff; /* White background for the card */
+  margin-bottom: 20px; /* Space between cards */
 }
 
 .event-card:hover {
@@ -74,6 +74,20 @@ button:hover {
     flex: 1 0 calc(50% - 20px);
     max-width: calc(50% - 20px);
   }
+}
+
+.event-card-title {
+  margin: 0; /* Remove default margin */
+  margin-bottom: 10px; /* Space between title and content */
+  color: #333; /* Dark text for better readability */
+  font-size: 1.3em; /* Larger font size for the title */
+}
+
+.event-card-info {
+  margin: 0; /* Remove default margin */
+  margin-top: 6px; /* Consistent space between the information lines */
+  color: #555; /* Slightly lighter color for content */
+  font-size: 1em; /* Regular font size for content */
 }
 
 /* For even smaller screens, make each event card take full width */

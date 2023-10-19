@@ -1,8 +1,10 @@
 // // components/MassShootingEvent.tsx
 
 import React from "react";
+import Link from 'next/link';
 
 interface MassShootingEventProps {
+  id: string;
   event: string;
   date: string;
   perpetrator: string;
@@ -10,15 +12,18 @@ interface MassShootingEventProps {
   numVictims: number;
 }
 
-function MassShootingEvent({ event, date, perpetrator, location, numVictims }) {
+const MassShootingEvent: React.FC<MassShootingEventProps> = ({ id, event, date, perpetrator, location, numVictims }) => {
   return (
-    <div className="event-card">
-      <h3>{event}</h3>
-      <p>Date: {date}</p>
-      <p>Perpetrator: {perpetrator}</p>
-      <p>Location: {location}</p>
-      <p>Number of Victims: {numVictims}</p>
-    </div>
+    // using 'id' for dynamic routing
+    <Link href={`../events/${id}`} passHref>
+      <div className="event-card">
+        <h3 className="event-card-title">{event}</h3>
+        <p className="event-card-info"><strong>Date:</strong> {date}</p>
+        <p className="event-card-info"><strong>Perpetrator:</strong> {perpetrator}</p>
+        <p className="event-card-info"><strong>Location:</strong> {location}</p>
+        <p className="event-card-info"><strong>Number of Victims:</strong> {numVictims}</p>
+      </div>
+    </Link>
   );
 }
 
