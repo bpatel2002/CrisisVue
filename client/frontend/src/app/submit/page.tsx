@@ -12,7 +12,8 @@ function SubmitPage() {
   const [motive, setMotive] = useState("");
   const [casualties, setCasualties] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [url, setUrl] = useState("");
+  const [additional_fields, setAdditional_fields] = useState("");
+  const [urls, setUrls] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +27,8 @@ function SubmitPage() {
       location: location,
       motive: motive,
       casualties: casualties,
-      additional_fields: url,
+      urls: urls,
+      additional_fields: additional_fields,
     };
 
     try {
@@ -48,7 +50,7 @@ function SubmitPage() {
       setMotive("");
       setCasualties("");
       setImage(null);
-      setUrl("");
+      setUrls("");
     } catch (error) {
       // Handle errors (you can display an error message to the user)
       console.error("Submission error:", error);
@@ -145,13 +147,23 @@ function SubmitPage() {
         />
         <br />
 
-        <label htmlFor="url">Related URLs (comma-separated):</label>
+        <label htmlFor="urls">Related URLs (comma-separated):</label>
         <input
           type="text"
-          id="url"
-          name="url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          id="urls"
+          name="urls"
+          value={urls}
+          onChange={(e) => setUrls(e.target.value)}
+        />
+        <br />
+
+        <label htmlFor="additional_fields">Additional Fields</label>
+        <input
+          type="text"
+          id="additional_fields"
+          name="additional_fields"
+          value={additional_fields}
+          onChange={(e) => setAdditional_fields(e.target.value)}
         />
         <br />
 
