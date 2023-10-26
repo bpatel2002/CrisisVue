@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useState } from "react";
 import "./SubmitPage.css";
 import axios from "axios";
+import validator from "validator";
 
 interface AdditionalField {
   key: string;
@@ -21,6 +22,24 @@ function SubmitPage() {
   const [additionalFields, setAdditionalFields] = useState<AdditionalField[]>(
     []
   );
+
+  //url verify function
+  const [urlValidationErrors, setUrlValidationErrors] = useState<string[]>();
+
+  const validateUrls = (inputUrls: string) => {
+    const urls = inputUrls.split(",").map((url) => url.trim());
+    const validationErrors: string[] = [];
+
+    urls.forEach((url) => {
+      if (!validator.isURL(url)) {
+        validationErrors.push(`Invalid URL: ${url}`);
+      }
+    });
+
+    setUrlValidationErrors(validationErrors);
+
+    return validationErrors.length === 0;
+  };
 
   const handleAdditionalFieldChange = (
     index: number,
@@ -62,6 +81,14 @@ function SubmitPage() {
       additional_fields: additionalFieldsObject,
     };
 
+    // verify url
+    const isUrlValid = validateUrls(urls);
+
+    if (!isUrlValid) {
+      // Display an error message or take appropriate action for invalid URLs
+      alert("Invalid URLs. Please check and correct the URLs.");
+      return;
+    }
     try {
       // Make a POST request using Axios
       const response = await axios.post(
@@ -70,6 +97,7 @@ function SubmitPage() {
       );
 
       // Handle the response (you can display a success message, reset the form, etc.)
+      alert("Submission successful!");
       console.log("Submission successful:", response.data);
 
       // Clear the form fields after successful submission (optional)
