@@ -65,15 +65,27 @@ def add(input_dict):
     return new_event_id
 
 
-# def get_one():
-"""
-This method will search for a single document in the mongodb collection
-using the passed in search parameters.
+def add_url(url_list, event_id):
+    db = init_mongo()
 
-Input: search parameters
+    try:
+        url_document = {
+            'event_id': event_id,
+            'url_list': url_list
+        }
+        url_id = db.urls.insert_one(url_document)
 
-Output: formatted dicionary of the document if one was found that matches the search params
-"""
+    except Exception as e:
+        error_message = f"{str(e)}"
+        return {"error": error_message}
+
+    return url_id
+
+
+def get_url(event_id):
+    db = init_mongo()
+    document = db.urls.find_one({"event_id": event_id})
+    return document
 
 
 def get_one_event_by_uid(uid):
