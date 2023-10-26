@@ -25,6 +25,7 @@ def submit_form():
         casualties = details['casualties']
         # Deal with additional user inputted fields?
         additional_fields = details['additional_fields']
+        urls = details['urls']
 
         input_dict = {
             "event_name": event_name,
@@ -37,9 +38,15 @@ def submit_form():
             "additional_fields": additional_fields
         }
 
-        res = add(input_dict)
+        list_urls = urls.split(",")
 
-        return make_response({"message": "succesfully added", "new_object_id": f"{res}"}, 200)
+        event_id = add(input_dict)
+        try:
+            add_url(list_urls, event_id)
+        except Exception as e:
+            return make_response({"Error": f"Error inserting urls: {e}"}, 400)
+
+        return make_response({"message": "succesfully added", "new_object_id": f"{event_id}"}, 200)
 
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
