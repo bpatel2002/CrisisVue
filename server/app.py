@@ -40,7 +40,7 @@ def submit_form():
 
         list_urls = urls.split(",")
 
-        event_id = add(input_dict)
+        event_id = str(add(input_dict))
         try:
             add_url(list_urls, event_id)
         except Exception as e:
@@ -162,18 +162,19 @@ def authentication():
         if inUsername == "admin" and inPassword == "12345":
             redirData["authenticated"] = True
             return make_response(
-                jsonify (redirData),
+                jsonify(redirData),
                 200
             )
         else:
             redirData["redirectURL"] = "NULL"
             return make_response(
-                jsonify (redirData),
+                jsonify(redirData),
                 200
             )
 
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
+
 
 if __name__ == '__main__':
     app.run()
