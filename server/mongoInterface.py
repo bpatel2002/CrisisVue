@@ -113,11 +113,8 @@ def get_all(filters=None, event_name=None, date=None, location=None, limit=100):
             '$match': find_params
         },
         {
-            "$sort": {"ratio": 1}
-        },
-        {
             '$sort': {
-                '_id': pymongo.DESCENDING
+                'date': 1
             }
         },
         {
