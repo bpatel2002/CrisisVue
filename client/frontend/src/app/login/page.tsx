@@ -1,58 +1,39 @@
 'use client'
-import React, { useState } from 'react';
-import './login.css';
-import axios from 'axios';
+import React from 'react';
+import { auth } from './firebase';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
-const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const Login = () => {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
 
-  const handleLogin = () => {
-    // Create a JSON object with username and password
-    const loginData = {
-      username: username,
-      password: password,
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await signInWithEmailAndPassword(email, password);
+  }
 
-    // Send a POST request to your server for authentication
-    axios
-      .post("http://127.0.0.1:5000/login", loginData)
-      .then((response) => {
-        // Assuming the server responds with authentication status and redirection URL
-        if (response.data.authenticated) {
-          // Redirect to the URL provided by the server
-          window.location.href = response.data.redirectURL;
-        } 
-        else {
-          alert('Login failed. Please check your credentials.');
-        }
-      })
-      .catch((error) => {
-        console.error('An error occurred:', error);
-        alert('Login failed. An error occurred.');
-      });
-  };
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (user) return <div>User is logged in</div>;
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <div className="input-container">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={handleLogin}>Login</button>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+      />
+      <button type="submit">Login</button>
+    </form>
   );
 };
 
-export default LoginPage;
+export default Login;
