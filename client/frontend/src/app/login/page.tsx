@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 const Login = () => {
