@@ -1,16 +1,19 @@
 'use client'
 import React from 'react'
 import BarChart from './components/barchart'
+
 import axios from 'axios'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import './visual.css'
+// import './visual.css'
 import Compare from './components/compare'
+import Timeline from './components/timeline'
 function page() {
     const [events, setEvents] = useState([]);
     const [selectedEvents, setSelectedEvents] = useState([]);
     const [originalChartData, setOriginalChartData] = useState([]);
     const [compareData, setCompareData] = useState([]);
+
 
 
     const handleEventSelection = (event) => {
@@ -90,8 +93,11 @@ function page() {
                         },
                     ],
                 };
-                setChartData(chartDatad);
 
+
+
+                setChartData(chartDatad);
+                // setTimelineData(timelineData);
                 setOriginalChartData(chartDatad);
             });
     }, []);
@@ -102,11 +108,14 @@ function page() {
         setCompareData([]);
     }
 
+
+    
+
     return (
         <>
 
             <div style={{ display: 'flex', gap: '20px', marginTop: '2em' }}>
-                <div style={{ height: '20em', width: '40em' }}><BarChart chartData={chartData} />
+                <div style={{ height: '20em', width: '60em' }}><BarChart chartData={chartData} />
                 </div>
                 <div className='eventlistWrapper'>
                     <div className="eventList">
@@ -117,9 +126,7 @@ function page() {
                                 <div className="eventDetails">
                                     <div className="eventTitle">{event.event_name}</div>
                                     <div className="eventDate">Date: {event.date}</div>
-                                    <div className="eventDescription">{event.summary}</div>
                                     <div className='location'>Location: {event.location}</div>
-                                    <div className="eventFooter"></div>
                                 </div>
                             </div>))}
                     </div>
@@ -130,6 +137,10 @@ function page() {
                 </div>
             </div>
             <div>< Compare Data={compareData} /></div>
+            <div>
+                < Timeline Events={events}/>
+            </div>
+            
 
         </>
     );

@@ -1,9 +1,10 @@
 .eventListWrapper {
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
+    /* display: flex; */
+    /* flex-direction: column; Stack children vertically */
     height: 100%; /* Adjust if necessary */
     width: 100%;
     float: right;
+    
 }
 
 button {
@@ -50,10 +51,9 @@ button {
 }
 .eventList{
     height: 20em;
-    width: 20em;
     overflow-y: auto;
     font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
-    float:right;
+    
     
 }
 .eventCard {
