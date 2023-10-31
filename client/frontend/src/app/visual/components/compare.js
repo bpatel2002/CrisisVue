@@ -6,7 +6,7 @@ import '../visual.css'
 const Compare = ({ Data }) => {
     return (
         <>
-        <div style={{display: 'flex'}}>
+        <div style={{display: 'flex', paddingTop: '10px'}}>
         {Data.map((event, index) => (
             <div className='eventCard'>
             <MassShootingEvent
