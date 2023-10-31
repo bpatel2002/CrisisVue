@@ -8,6 +8,7 @@ import NavItem from "./NavItem";
 const MENU_LIST = [
   { text: "Home", href: "/" },
   { text: "Visualization", href: "../visual" },
+  { text: "Timeline", href: "/timeline" },
   { text: "Submit", href: "/submit" },
 ];
 const Navbar = () => {

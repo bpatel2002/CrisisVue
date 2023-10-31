@@ -1,13 +1,10 @@
 'use client'
 import React from 'react'
 import BarChart from './components/barchart'
-
 import axios from 'axios'
 import { useState } from 'react';
 import { useEffect } from 'react';
-// import './visual.css'
 import Compare from './components/compare'
-import Timeline from './components/timeline'
 function page() {
     const [events, setEvents] = useState([]);
     const [selectedEvents, setSelectedEvents] = useState([]);
@@ -97,8 +94,8 @@ function page() {
 
 
                 setChartData(chartDatad);
-                // setTimelineData(timelineData);
                 setOriginalChartData(chartDatad);
+                setCompareData(fetchedEvents);
             });
     }, []);
 
@@ -109,7 +106,7 @@ function page() {
     }
 
 
-    
+
 
     return (
         <>
@@ -137,10 +134,6 @@ function page() {
                 </div>
             </div>
             <div>< Compare Data={compareData} /></div>
-            <div>
-                < Timeline Events={events}/>
-            </div>
-            
 
         </>
     );
