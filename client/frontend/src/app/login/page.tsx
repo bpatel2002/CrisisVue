@@ -2,6 +2,7 @@
 import React from 'react';
 import { auth } from '../firebase';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import './login.css'
 
 const Login = () => {
   const [email, setEmail] = React.useState('');
@@ -18,21 +19,24 @@ const Login = () => {
   if (user) return <div>User is logged in</div>;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="login-container"> {/* Step 4: Apply the CSS class */}
+      <h1>Login</h1> {/* Optional: Added an H1 element for the title */}
+      <form onSubmit={handleSubmit} className="input-container"> {/* Step 4: Apply the CSS class */}
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 };
 
