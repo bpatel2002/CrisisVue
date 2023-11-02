@@ -8,8 +8,15 @@ import Compare from './components/compare'
 function page() {
     const [events, setEvents] = useState([]);
     const [selectedEvents, setSelectedEvents] = useState([]);
+    const [filteredEvents, setFilteredEvents] = useState([]);
+
     const [originalChartData, setOriginalChartData] = useState([]);
     const [compareData, setCompareData] = useState([]);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [displaySearchResults, setDisplaySearchReults] = useState(false);
+  
+    const [searchDate, setSearchDate] = useState("");
 
 
 
@@ -69,6 +76,7 @@ function page() {
             .then(response => {
                 const fetchedEvents = response.data;
                 setEvents(fetchedEvents);
+                setFilteredEvents(fetchedEvents);
 
                 const labels = fetchedEvents.map(event => event.event_name);
                 const casualties = fetchedEvents.map(event => event.casualties);
@@ -95,7 +103,7 @@ function page() {
 
                 setChartData(chartDatad);
                 setOriginalChartData(chartDatad);
-                setCompareData(fetchedEvents);
+
             });
     }, []);
 
@@ -103,9 +111,22 @@ function page() {
         setChartData(originalChartData);
         setSelectedEvents([]);
         setCompareData([]);
+        setFilteredEvents(events);
     }
+    useEffect(() => {
+        if(searchQuery === "") {
+            setFilteredEvents(events);
+        } else {
+            const results = events.filter(event =>
+                event.event_name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredEvents(results);
+        }
+    }, [events, searchQuery]);
 
-
+    const showAllEvents = () => {
+        setSearchQuery("");
+    }
 
 
     return (
@@ -115,8 +136,17 @@ function page() {
                 <div style={{ height: '20em', width: '60em' }}><BarChart chartData={chartData} />
                 </div>
                 <div className='eventlistWrapper'>
+                    <section className="search-section">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <button onClick={showAllEvents}>Clear</button>
+                    </section>
                     <div className="eventList">
-                        {events.map((event, index) => (
+                        {filteredEvents.map((event, index) => (
                             <div key={index} className={`eventCard ${selectedEvents.includes(event) ? 'selected' : ''}`}
                                 onClick={() => handleEventSelection(event)}
                             >
@@ -132,8 +162,10 @@ function page() {
 
 
                 </div>
+                
             </div>
-            <div>< Compare Data={compareData} /></div>
+            <div id='compare'>< Compare Data={compareData} /></div>
+            
 
         </>
     );

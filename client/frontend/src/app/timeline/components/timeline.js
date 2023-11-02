@@ -10,7 +10,7 @@ const Timeline = ({ Events }) => {
     return (
         <>
         <div>
-            <h3>Timeline</h3>
+            <h3 style={{textAlign: 'center'}}>Timeline</h3>
             <div style={{overflowY: 'auto', height: '100%'}}>
                 
                 <VerticalTimeline>
@@ -23,8 +23,8 @@ const Timeline = ({ Events }) => {
                         >
                            <Link href={`../../events/${event._id.$oid}`} passHref>
                             <h3 className="vertical-timeline-element-title">{event.event_name}</h3>
-                            </Link>
                             <p className="vertical-timeline-element-subtitle">{event.summary}</p>
+                            </Link>
                         </VerticalTimelineElement>
                         
                     ))}
