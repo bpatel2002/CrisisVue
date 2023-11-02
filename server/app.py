@@ -52,6 +52,18 @@ def submit_form():
         return make_response({"Error": f"Missing field: {e}"}, 500)
 
 
+@app.route('/urls/<string:id>', methods=['GET'])
+def get_urls(id):
+    """"
+    This method will take a id from the url parameters and search for the documents in the urls collection which match with that id
+    """
+    try:
+        document = get_url_document(id)
+        return jsonify(json.loads(dumps(document))), 200
+    except Exception as e:
+        return make_response({"data": f"Error {e}"}, 500)
+
+
 @app.route('/events', methods=['GET'])
 def searchEvents():
     filters = request.args.get('filters', None)

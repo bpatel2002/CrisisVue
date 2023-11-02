@@ -118,7 +118,7 @@ def add_url(url_list, event_id):
     return url_id
 
 
-def get_url(event_id):
+def get_url_document(event_id):
     db = init_mongo()
     document = db.urls.find_one({"event_id": event_id})
     return document
@@ -210,3 +210,6 @@ def parse_filters(filters, event_name=None, date=None, location=None):
         query_params.update({'location': location})
 
     return query_params
+
+
+print(get_url_document("653ac9b27f6e5672bf4b4562"))
