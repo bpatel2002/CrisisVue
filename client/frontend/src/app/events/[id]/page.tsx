@@ -96,7 +96,7 @@ const EventDetail = ({
         motive={eventDetails.motive || "N/A"}
       />
       <div className="url-list-container">
-        {eventUrls.url_list.length > 0 ? (
+        {eventUrls != null && eventUrls.url_list.length > 0 ? (
           <ul>
             {eventUrls.url_list.map((url, index) => (
               <li key={index}>
