@@ -1,34 +1,67 @@
 .event-details-container {
-    max-width: 600px; /* or any specific sizing according to your design requirement */
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #f9f9f9; /* light grey color for the container background */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow around the container */
-    font-family: 'Arial', sans-serif; /* generic font, you can change this to your preference */
+  max-width: 600px; /* or any specific sizing according to your design requirement */
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f9f9f9; /* light grey color for the container background */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow around the container */
+  font-family: "Arial", sans-serif; /* generic font, you can change this to your preference */
 }
 
 .event-title {
-    color: #333; /* dark text color for the event title */
-    font-size: 2.5em; /* making the event name significantly larger */
-    margin-bottom: 20px; /* space between title and the rest of the content */
-    text-align: center; /* if you prefer the title to be centered */
+  color: #333; /* dark text color for the event title */
+  font-size: 2.5em; /* making the event name significantly larger */
+  margin-bottom: 20px; /* space between title and the rest of the content */
+  text-align: center; /* if you prefer the title to be centered */
 }
 
 .event-info {
-    color: #555; /* dark grey text for the content */
-    font-size: 1em; /* standard size for the content text */
-    margin-bottom: 10px; /* space between lines of text */
-    line-height: 1.6; /* space between lines of text */
+  color: #555; /* dark grey text for the content */
+  font-size: 1em; /* standard size for the content text */
+  margin-bottom: 10px; /* space between lines of text */
+  line-height: 1.6; /* space between lines of text */
 }
 
 .event-info strong {
-    font-weight: bold; /* makes the titles (e.g., "Date:", "Location:") bold */
-    color: #333; /* optional: if you want the titles a bit darker than the content */
+  font-weight: bold; /* makes the titles (e.g., "Date:", "Location:") bold */
+  color: #333; /* optional: if you want the titles a bit darker than the content */
 }
 
 .event-summary {
-    margin-top: 10px; /* optional space above the summary */
+  margin-top: 10px; /* optional space above the summary */
 }
 
+.url-list-container {
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: auto;
+}
 
+.url-list-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.url-list-container li {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.url-list-container li:hover {
+  transform: translateY(-2px);
+}
+
+.url-list-container a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.url-list-container a:hover {
+  text-decoration: underline;
+}

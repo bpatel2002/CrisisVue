@@ -1,8 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import "./SubmitPage.css";
 import axios from "axios";
 import {auth} from '../firebase';
+import validator from "validator";
+
+interface AdditionalField {
+  key: string;
+  value: string;
+}
 
 function SubmitPage() {
   const [name, setName] = useState("");
@@ -13,8 +19,47 @@ function SubmitPage() {
   const [motive, setMotive] = useState("");
   const [casualties, setCasualties] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [additional_fields, setAdditional_fields] = useState("");
   const [urls, setUrls] = useState("");
+  const [additionalFields, setAdditionalFields] = useState<AdditionalField[]>(
+    []
+  );
+
+  //url verify function
+  const [urlValidationErrors, setUrlValidationErrors] = useState<string[]>();
+
+  const validateUrls = (inputUrls: string) => {
+    const urls = inputUrls.split(",").map((url) => url.trim());
+    const validationErrors: string[] = [];
+
+    urls.forEach((url) => {
+      if (!validator.isURL(url)) {
+        validationErrors.push(`Invalid URL: ${url}`);
+      }
+    });
+
+    setUrlValidationErrors(validationErrors);
+
+    return validationErrors.length === 0;
+  };
+
+  const handleAdditionalFieldChange = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const values = [...additionalFields];
+    values[index][event.target.name as "key" | "value"] = event.target.value;
+    setAdditionalFields(values);
+  };
+
+  const addAdditionalField = () => {
+    setAdditionalFields([...additionalFields, { key: "", value: "" }]);
+  };
+
+  const removeAdditionalField = (index: number) => {
+    const values = [...additionalFields];
+    values.splice(index, 1);
+    setAdditionalFields(values);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +69,10 @@ function SubmitPage() {
 
     const token = await user.getIdToken();
 
+    const additionalFieldsObject = additionalFields.reduce((obj, item) => {
+      if (item.key) obj[item.key] = item.value;
+      return obj;
+    }, {} as Record<string, string>);
 
     // Create a data object with the form data
     const formData = {
@@ -35,9 +84,17 @@ function SubmitPage() {
       motive: motive,
       casualties: casualties,
       urls: urls,
-      additional_fields: additional_fields,
+      additional_fields: additionalFieldsObject,
     };
 
+    // verify url
+    const isUrlValid = validateUrls(urls);
+
+    if (!isUrlValid) {
+      // Display an error message or take appropriate action for invalid URLs
+      alert("Invalid URLs. Please check and correct the URLs.");
+      return;
+    }
     try {
       // Make a POST request using Axios
       const response = await axios.post(
@@ -48,6 +105,7 @@ function SubmitPage() {
       );
 
       // Handle the response (you can display a success message, reset the form, etc.)
+      alert("Submission successful!");
       console.log("Submission successful:", response.data);
 
       // Clear the form fields after successful submission (optional)
@@ -59,6 +117,7 @@ function SubmitPage() {
       setMotive("");
       setCasualties("");
       setImage(null);
+      setAdditionalFields([{ key: "", value: "" }]);
       setUrls("");
     } catch (error) {
       // Handle errors (you can display an error message to the user)
@@ -166,14 +225,36 @@ function SubmitPage() {
         />
         <br />
 
-        <label htmlFor="additional_fields">Additional Fields</label>
-        <input
-          type="text"
-          id="additional_fields"
-          name="additional_fields"
-          value={additional_fields}
-          onChange={(e) => setAdditional_fields(e.target.value)}
-        />
+        <div>
+          <label>Additional Fields:</label>
+          {additionalFields.map((field, index) => (
+            <div key={index} className="additional-field">
+              <input
+                type="text"
+                name="key"
+                placeholder="Key"
+                value={field.key}
+                onChange={(e) => handleAdditionalFieldChange(index, e)}
+              />
+              <input
+                type="text"
+                name="value"
+                placeholder="Value"
+                value={field.value}
+                onChange={(e) => handleAdditionalFieldChange(index, e)}
+              />
+              <button
+                type="button"
+                onClick={() => removeAdditionalField(index)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button type="button" onClick={addAdditionalField}>
+            Add Additional Field
+          </button>
+        </div>
         <br />
 
         <input type="submit" value="Submit" />

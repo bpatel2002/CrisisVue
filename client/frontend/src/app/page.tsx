@@ -7,8 +7,19 @@ import "./page.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MassShootingEvent from "./components/MassShootingEvent";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
+// import L from 'leaflet';
+
+import 'leaflet/dist/leaflet.css';
+import Link from 'next/link'
 
 export default function Home() {
+
+  const redDotIcon = L.divIcon({
+    className: 'red-dot-icon',
+    iconSize: [10, 10]
+  });
+
   const [events, setEvents] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [displaySearchResults, setDisplaySearchReults] = useState(false);
@@ -73,12 +84,14 @@ export default function Home() {
           {events.map((event, index) => (
             <MassShootingEvent
               key={index} // Ensure each component maintains a unique key for optimal rendering performance
-              id = {event._id.$oid}
+              id={event._id.$oid}
               event={event.event_name}
               date={event.date || "N/A"}
               perpetrator={event.perpetrator || "N/A"}
               location={event.location || "N/A"}
               numVictims={event.casualties || 0}
+              lat={event.lat || 0}
+              long={event.long || 0}
             />
           ))}
         </section>
@@ -90,7 +103,7 @@ export default function Home() {
           {events.map((event, index) => (
             <MassShootingEvent
               key={index} // Ensure each component maintains a unique key for optimal rendering performance
-              id = {event._id.$oid}
+              id={event._id.$oid}
               event={event.event_name}
               date={event.date || "N/A"}
               perpetrator={event.perpetrator || "N/A"}
@@ -102,8 +115,9 @@ export default function Home() {
       )}
 
       <section className="statistics">
-        <h2>Mass Shooting Statistics</h2>
-        {/* Graph here */}
+        <h2>Mass Shootings Statistics</h2>
+        {/* Insert your timeline here */}
+        {/* Other components or elements */}
       </section>
 
       <section className="advanced-search">
@@ -121,6 +135,27 @@ export default function Home() {
         />
         <button onClick={handleSearch}>Search</button>
       </section>
+
+      <section className="map-container">
+        <h2>Map of Mass Shootings</h2>
+        <MapContainer center={[38.9072, -77.0369]} zoom={5} style={{ width: '100%', height: '400px' }}>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {events.filter(event => event.lat && event.long).map((event, index) => (
+            <Marker key={index} position={[event.lat, event.long]} icon={redDotIcon}>
+              <Popup>
+                <Link key={event._id.$oid} href={`/events/${event._id.$oid}`}>{event.event_name}</Link>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </section>
+
     </div>
   );
 }
+
+
+

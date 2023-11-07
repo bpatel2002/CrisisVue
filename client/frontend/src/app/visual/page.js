@@ -4,13 +4,20 @@ import BarChart from './components/barchart'
 import axios from 'axios'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import './visual.css'
 import Compare from './components/compare'
 function page() {
     const [events, setEvents] = useState([]);
     const [selectedEvents, setSelectedEvents] = useState([]);
+    const [filteredEvents, setFilteredEvents] = useState([]);
+
     const [originalChartData, setOriginalChartData] = useState([]);
     const [compareData, setCompareData] = useState([]);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [displaySearchResults, setDisplaySearchReults] = useState(false);
+  
+    const [searchDate, setSearchDate] = useState("");
+
 
 
     const handleEventSelection = (event) => {
@@ -69,6 +76,7 @@ function page() {
             .then(response => {
                 const fetchedEvents = response.data;
                 setEvents(fetchedEvents);
+                setFilteredEvents(fetchedEvents);
 
                 const labels = fetchedEvents.map(event => event.event_name);
                 const casualties = fetchedEvents.map(event => event.casualties);
@@ -90,9 +98,12 @@ function page() {
                         },
                     ],
                 };
-                setChartData(chartDatad);
 
+
+
+                setChartData(chartDatad);
                 setOriginalChartData(chartDatad);
+
             });
     }, []);
 
@@ -100,26 +111,49 @@ function page() {
         setChartData(originalChartData);
         setSelectedEvents([]);
         setCompareData([]);
+        setFilteredEvents(events);
     }
+    useEffect(() => {
+        if(searchQuery === "") {
+            setFilteredEvents(events);
+        } else {
+            const results = events.filter(event =>
+                event.event_name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredEvents(results);
+        }
+    }, [events, searchQuery]);
+
+    const showAllEvents = () => {
+        setSearchQuery("");
+    }
+
 
     return (
         <>
 
             <div style={{ display: 'flex', gap: '20px', marginTop: '2em' }}>
-                <div style={{ height: '20em', width: '40em' }}><BarChart chartData={chartData} />
+                <div style={{ height: '20em', width: '60em' }}><BarChart chartData={chartData} />
                 </div>
                 <div className='eventlistWrapper'>
+                    <section className="search-section">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <button onClick={showAllEvents}>Clear</button>
+                    </section>
                     <div className="eventList">
-                        {events.map((event, index) => (
+                        {filteredEvents.map((event, index) => (
                             <div key={index} className={`eventCard ${selectedEvents.includes(event) ? 'selected' : ''}`}
                                 onClick={() => handleEventSelection(event)}
                             >
                                 <div className="eventDetails">
                                     <div className="eventTitle">{event.event_name}</div>
                                     <div className="eventDate">Date: {event.date}</div>
-                                    <div className="eventDescription">{event.summary}</div>
                                     <div className='location'>Location: {event.location}</div>
-                                    <div className="eventFooter"></div>
                                 </div>
                             </div>))}
                     </div>
@@ -128,8 +162,10 @@ function page() {
 
 
                 </div>
+                
             </div>
-            <div>< Compare Data={compareData} /></div>
+            <div id='compare'>< Compare Data={compareData} /></div>
+            
 
         </>
     );
