@@ -4,6 +4,8 @@ import "./SubmitPage.css";
 import axios from "axios";
 import {auth} from '../firebase';
 import validator from "validator";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface AdditionalField {
   key: string;
@@ -93,7 +95,7 @@ function SubmitPage() {
 
     if (!isUrlValid) {
       // Display an error message or take appropriate action for invalid URLs
-      alert("Invalid URLs. Please check and correct the URLs.");
+      toast.error("Invalid URLs. Please check and correct the URLs.");
       return;
     }
     try {
@@ -106,8 +108,7 @@ function SubmitPage() {
       );
 
       // Handle the response (you can display a success message, reset the form, etc.)
-      alert("Submission successful!");
-      console.log("Submission successful:", response.data);
+      toast.success("Submission successful!");
 
       // Clear the form fields after successful submission (optional)
       setName("");
@@ -121,7 +122,7 @@ function SubmitPage() {
       setUrls("");
     } catch (error) {
       // Handle errors (you can display an error message to the user)
-      console.error("Submission error:", error);
+      toast.error("Submission error:" + error);
     }
   };
 

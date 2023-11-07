@@ -2,7 +2,18 @@
 import React from 'react';
 import { auth } from '../firebase';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './login.css'
+
+const containerStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  height: '100vh', // Full viewport height
+  textAlign: 'center',
+};
 
 const Login = () => {
   const [email, setEmail] = React.useState('');
@@ -16,7 +27,15 @@ const Login = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  if (user) return <div>User is logged in</div>;
+  if (user) return (
+    <div style={containerStyle}>
+      <ToastContainer />
+      <h1>Logged in successfully!</h1>
+      <button onClick={() => window.location.href = '/'}>
+        Go to Home Page
+      </button>
+    </div>
+  );
 
   return (
     <div className="login-container"> {/* Step 4: Apply the CSS class */}
