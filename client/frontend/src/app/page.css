@@ -22,7 +22,8 @@ p {
   margin-bottom: 20px;
 }
 
-input[type="text"], input[type="date"] {
+input[type="text"],
+input[type="date"] {
   padding: 10px 15px;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
@@ -44,7 +45,10 @@ button:hover {
   background-color: #2980b9;
 }
 
-.search-section, .recent-events, .statistics, .advanced-search {
+.search-section,
+.recent-events,
+.statistics,
+.advanced-search {
   margin-top: 40px;
   padding: 30px;
   background-color: #ffffff;
@@ -52,23 +56,22 @@ button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
-
-
 .event-card {
   padding: 20px;
-  border: 1px solid #ddd; /* Light grey border */
-  border-radius: 5px; /* Rounded borders */
-  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out; /* Adds a smooth shadow and transform transition */
-  cursor: pointer; /* Indicates the item is clickable */
-  background-color: #ffffff; /* White background for the card */
-  margin-bottom: 20px; /* Space between cards */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+  cursor: pointer;
+  background-color: #ffffff;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
 }
 
 .event-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
-/* For smaller screens, make each event card take half the width */
+
 @media (max-width: 768px) {
   .event-card {
     flex: 1 0 calc(50% - 20px);
@@ -77,23 +80,40 @@ button:hover {
 }
 
 .event-card-title {
-  margin: 0; /* Remove default margin */
-  margin-bottom: 10px; /* Space between title and content */
-  color: #333; /* Dark text for better readability */
-  font-size: 1.3em; /* Larger font size for the title */
+  margin: 0;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1.3em;
 }
 
 .event-card-info {
-  margin: 0; /* Remove default margin */
-  margin-top: 6px; /* Consistent space between the information lines */
-  color: #555; /* Slightly lighter color for content */
-  font-size: 1em; /* Regular font size for content */
+  margin: 0;
+  margin-top: 6px;
+  color: #555;
+  font-size: 1em;
 }
 
-/* For even smaller screens, make each event card take full width */
 @media (max-width: 480px) {
   .event-card {
     flex: 1 0 100%;
     max-width: 100%;
   }
+}
+
+.red-dot-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+  position: relative;
+  top: -5px;
+  left: -5px;
+}
+
+.map-container {
+  background-color: #ffffff; /* White background */
+  padding: 10px;             /* Space inside the container */
+  margin: 10px 0;            /* Space outside the container, especially separating it from the map */
+  border-radius: 5px;        /* Rounded corners, adjust if necessary */
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow for depth */
 }

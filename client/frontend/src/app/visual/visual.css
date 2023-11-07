@@ -1,9 +1,9 @@
 .eventListWrapper {
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
+    /* display: flex; */
+    /* flex-direction: column; Stack children vertically */
     height: 100%; /* Adjust if necessary */
     width: 100%;
-    float: right;
+    float: right;    
 }
 
 button {
@@ -49,11 +49,10 @@ button {
   box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
 }
 .eventList{
-    height: 20em;
-    width: 20em;
+    height: 400px;
     overflow-y: auto;
     font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
-    float:right;
+    
     
 }
 .eventCard {
@@ -95,13 +94,26 @@ button {
     justify-content: space-between;
 }
 
-.location{
-    
-}
-
-
 
 .eventFooter > div {
     display: flex;
     align-items: center;
 }
+
+@keyframes easeIn {
+    from {
+        opacity: 0;
+        transform: translateY(200px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.compare{
+    animation: easeIn 0.5s forwards;
+
+}
+/* .easeInAnimation {
+    animation: easeIn 0.5s forwards;
+} */

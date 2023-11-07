@@ -53,7 +53,7 @@ def submit_form():
 
         list_urls = urls.split(",")
 
-        event_id = add(input_dict)
+        event_id = str(add(input_dict))
         try:
             add_url(list_urls, event_id)
         except Exception as e:
@@ -63,6 +63,18 @@ def submit_form():
 
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
+
+
+@app.route('/urls/<string:id>', methods=['GET'])
+def get_urls(id):
+    """"
+    This method will take a id from the url parameters and search for the documents in the urls collection which match with that id
+    """
+    try:
+        document = get_url_document(id)
+        return jsonify(json.loads(dumps(document))), 200
+    except Exception as e:
+        return make_response({"data": f"Error {e}"}, 500)
 
 
 @app.route('/events', methods=['GET'])
@@ -175,18 +187,19 @@ def authentication():
         if inUsername == "admin" and inPassword == "12345":
             redirData["authenticated"] = True
             return make_response(
-                jsonify (redirData),
+                jsonify(redirData),
                 200
             )
         else:
             redirData["redirectURL"] = "NULL"
             return make_response(
-                jsonify (redirData),
+                jsonify(redirData),
                 200
             )
 
     except KeyError as e:
         return make_response({"Error": f"Missing field: {e}"}, 500)
+
 
 if __name__ == '__main__':
     app.run()

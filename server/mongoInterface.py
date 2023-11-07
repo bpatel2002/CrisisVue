@@ -5,6 +5,39 @@ from dotenv import load_dotenv
 import datetime
 from bson.objectid import ObjectId
 import re
+from geopy.geocoders import Nominatim
+import time
+
+
+def get_lat_long(location):
+    geolocator = Nominatim(user_agent="MassShootingDigitalLibrary")
+    try:
+        location = geolocator.geocode(location)
+        if location:
+            return location.latitude, location.longitude
+        else:
+            print("Location not found:", location)
+            return None, None
+    except Exception as e:
+        print("Error getting latitude and longitude for location",
+              location, ":", str(e))
+        return None, None
+
+
+def update_to_use_lat_long():
+    """
+    Method to help us update existing submissions with no lat and long
+    """
+    db = init_mongo()
+    for event in db.Events.find({"location": {"$exists": True}, "lat": {"$exists": False}}):
+        location = event['location']
+        lat, long = get_lat_long(location)
+        if lat is not None and long is not None:
+            db.Events.update_one({"_id": event["_id"]}, {
+                                 "$set": {"lat": lat, "long": long}})
+            print("Updated event:",
+                  event["_id"], "with location:", location, "lat:", lat, "long:", long)
+        time.sleep(1)  # To avoid hitting request limit
 
 
 def init_mongo():
@@ -47,6 +80,8 @@ def add(input_dict):
         error_message = f"Missing requried argument: {str(e)}"
         return {"error": error_message}
 
+    lat, long = get_lat_long(location)
+
     event_document = {
         'event_name': event_name,
         'perpetrator': perpetrator,
@@ -55,9 +90,10 @@ def add(input_dict):
         'location': location,
         'motive': motive,
         'casualties': casualties,
-        'date_submitted': date_submitted
+        'date_submitted': date_submitted,
+        'lat': lat,
+        'long': long
     }
-
     event_document.update(additional_fields)
 
     new_event_id = db.Events.insert_one(event_document).inserted_id
@@ -82,7 +118,7 @@ def add_url(url_list, event_id):
     return url_id
 
 
-def get_url(event_id):
+def get_url_document(event_id):
     db = init_mongo()
     document = db.urls.find_one({"event_id": event_id})
     return document
@@ -174,3 +210,6 @@ def parse_filters(filters, event_name=None, date=None, location=None):
         query_params.update({'location': location})
 
     return query_params
+
+
+print(get_url_document("653ac9b27f6e5672bf4b4562"))
