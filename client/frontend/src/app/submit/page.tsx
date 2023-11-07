@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useState } from "react";
 import "./SubmitPage.css";
 import axios from "axios";
+import {auth} from '../firebase';
 import validator from "validator";
 
 interface AdditionalField {
@@ -63,6 +64,11 @@ function SubmitPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not logged in");
+
+    const token = await user.getIdToken();
+
     const additionalFieldsObject = additionalFields.reduce((obj, item) => {
       if (item.key) obj[item.key] = item.value;
       return obj;
@@ -93,7 +99,9 @@ function SubmitPage() {
       // Make a POST request using Axios
       const response = await axios.post(
         "http://127.0.0.1:5000/events",
-        formData
+        formData, {headers: {
+          'Authorization': `Bearer ${token}`
+        }}
       );
 
       // Handle the response (you can display a success message, reset the form, etc.)
