@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useState } from "react";
 import "./SubmitPage.css";
 import axios from "axios";
+import {auth} from '../firebase';
 import validator from "validator";
 
 interface AdditionalField {
@@ -18,7 +19,6 @@ function SubmitPage() {
   const [location, setLocation] = useState("");
   const [motive, setMotive] = useState("");
   const [casualties, setCasualties] = useState("");
-  const [image, setImage] = useState<File | null>(null);
   const [urls, setUrls] = useState("");
   const [additionalFields, setAdditionalFields] = useState<AdditionalField[]>(
     []
@@ -64,6 +64,11 @@ function SubmitPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not logged in");
+
+    const token = await user.getIdToken();
+
     const additionalFieldsObject = additionalFields.reduce((obj, item) => {
       if (item.key) obj[item.key] = item.value;
       return obj;
@@ -95,7 +100,9 @@ function SubmitPage() {
       // Make a POST request using Axios
       const response = await axios.post(
         "http://127.0.0.1:5000/events",
-        formData
+        formData, {headers: {
+          'Authorization': `Bearer ${token}`
+        }}
       );
 
       // Handle the response (you can display a success message, reset the form, etc.)
@@ -110,7 +117,6 @@ function SubmitPage() {
       setLocation("");
       setMotive("");
       setCasualties("");
-      setImage(null);
       setAdditionalFields([{ key: "", value: "" }]);
       setUrls("");
     } catch (error) {
@@ -123,7 +129,7 @@ function SubmitPage() {
     <div className="form-container">
       <h1>Submit Information</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">name:</label>
+        <label htmlFor="name">Shooting Name:</label>
         <input
           type="text"
           id="name"
@@ -196,15 +202,6 @@ function SubmitPage() {
           value={motive}
           onChange={(e) => setMotive(e.target.value)}
           required
-        />
-        <br />
-
-        <label htmlFor="image">Upload Image:</label>
-        <input
-          type="file"
-          id="image"
-          name="image"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
         />
         <br />
 

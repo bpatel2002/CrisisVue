@@ -4,9 +4,17 @@ from mongoInterface import *
 from bson.json_util import dumps
 from flask import Flask
 from flask_cors import CORS
+import firebase_admin
+from firebase_admin import credentials, auth
+
 app = Flask(__name__)
 
+
 CORS(app)
+cred = credentials.Certificate("./mass-shooting-digital-library-firebase-adminsdk-1ckjm-814244dce9.json")
+firebase_admin.initialize_app(cred)
+
+
 
 # Endpoint to handle what happens when admin clicks submit button on form to add data
 
@@ -14,7 +22,12 @@ CORS(app)
 @app.route('/events', methods=['POST'])
 def submit_form():
     try:
+
+        token = request.headers.get("Authorization").split(' ')[1]
+        user = auth.verify_id_token(token)
         # Get data from user inupt form
+        if user is None:
+            return make_response({"error": "Invalid token"}, 401)
         details = request.json
         place = details['place']
         event_name = details['name']
