@@ -66,6 +66,7 @@ def add(input_dict):
     db = init_mongo()
 
     try:
+        place = input_dict["place"]
         event_name = input_dict["event_name"]
         perpetrator = input_dict["perpetrator"]
         summary = input_dict["summary"]
@@ -83,6 +84,7 @@ def add(input_dict):
     lat, long = get_lat_long(location)
 
     event_document = {
+        'place':place,
         'event_name': event_name,
         'perpetrator': perpetrator,
         'summary': summary,

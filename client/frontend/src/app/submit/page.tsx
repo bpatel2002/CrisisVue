@@ -11,6 +11,7 @@ interface AdditionalField {
 
 function SubmitPage() {
   const [name, setName] = useState("");
+  const [place, setPlace] = useState("");
   const [perpetrator, setPerpetrator] = useState("");
   const [summary, setSummary] = useState("");
   const [date, setDate] = useState("");
@@ -70,6 +71,7 @@ function SubmitPage() {
 
     // Create a data object with the form data
     const formData = {
+      place:place,
       name: name,
       perpetrator: perpetrator,
       summary: summary,
@@ -164,8 +166,18 @@ function SubmitPage() {
           required
         />
         <br />
+        <label htmlFor="location">Place:</label>
+        <input
+          type="text"
+          id="place"
+          name="place"
+          value={place}
+          onChange={(e) => setPlace(e.target.value)}
+          required
+        />
+        <br />
 
-        <label htmlFor="location">Location:</label>
+        <label htmlFor="location">City, State:</label>
         <input
           type="text"
           id="location"

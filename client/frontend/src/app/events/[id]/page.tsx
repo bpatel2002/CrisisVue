@@ -16,6 +16,7 @@ interface EventDetails {
   casualties?: number;
   summary?: string;
   motive?: string;
+  place?: string;
 }
 
 const EventDetail = ({
@@ -94,6 +95,8 @@ const EventDetail = ({
         numVictims={eventDetails.casualties || 0}
         summary={eventDetails.summary || "N/A"}
         motive={eventDetails.motive || "N/A"}
+        place={eventDetails.place || "N/A"}
+
       />
       <div className="url-list-container">
         {eventUrls != null && eventUrls.url_list.length > 0 ? (

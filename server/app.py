@@ -16,6 +16,7 @@ def submit_form():
     try:
         # Get data from user inupt form
         details = request.json
+        place = details['place']
         event_name = details['name']
         perpetrator = details['perpetrator']
         summary = details['summary']
@@ -28,6 +29,7 @@ def submit_form():
         urls = details['urls']
 
         input_dict = {
+            "place": place,
             "event_name": event_name,
             "perpetrator": perpetrator,
             "summary": summary,
