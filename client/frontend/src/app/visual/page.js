@@ -15,7 +15,7 @@ function page() {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [displaySearchResults, setDisplaySearchReults] = useState(false);
-  
+
     const [searchDate, setSearchDate] = useState("");
 
 
@@ -114,7 +114,7 @@ function page() {
         setFilteredEvents(events);
     }
     useEffect(() => {
-        if(searchQuery === "") {
+        if (searchQuery === "") {
             setFilteredEvents(events);
         } else {
             const results = events.filter(event =>
@@ -132,8 +132,9 @@ function page() {
     return (
         <>
 
-            <div style={{ display: 'flex', gap: '20px', marginTop: '2em' }}>
+            <div style={{ display: 'flex', gap: '20px', marginRight: '20px' }}>
                 <div style={{ height: '20em', width: '60em' }}><BarChart chartData={chartData} />
+                < Compare Data={compareData} />
                 </div>
                 <div className='eventlistWrapper'>
                     <section className="search-section">
@@ -143,7 +144,7 @@ function page() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <button onClick={showAllEvents}>Clear</button>
+                        <button class="button-9" style={{ marginLeft: '5px' }} onClick={showAllEvents}>Clear</button>
                     </section>
                     <div className="eventList">
                         {filteredEvents.map((event, index) => (
@@ -157,15 +158,14 @@ function page() {
                                 </div>
                             </div>))}
                     </div>
+                    
+                    
                     <button class="button-9" onClick={handleCompare}>Compare</button>
                     <button style={{ float: "right" }} class="button-9" onClick={resetChart}>Reset</button>
-
-
                 </div>
-                
+
             </div>
-            <div id='compare'>< Compare Data={compareData} /></div>
-            
+
 
         </>
     );

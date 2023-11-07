@@ -3,7 +3,8 @@
     /* flex-direction: column; Stack children vertically */
     height: 100%; /* Adjust if necessary */
     width: 100%;
-    float: right;    
+    float: right; 
+    margin-right: 20px;   
 }
 
 button {
@@ -52,6 +53,8 @@ button {
     height: 400px;
     overflow-y: auto;
     font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
+    padding: 10px;
+    
     
     
 }
