@@ -48,7 +48,8 @@ button:hover {
 .search-section,
 .recent-events,
 .statistics,
-.advanced-search {
+.advanced-search
+.search-results {
   margin-top: 40px;
   padding: 30px;
   background-color: #ffffff;
@@ -56,15 +57,33 @@ button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
+
 .event-card {
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
   transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
-  cursor: pointer;
-  background-color: #ffffff;
   background-color: #f9f9f9;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Align items to the top */
+  margin-bottom: 20px; /* Add some space between cards */
+  /*background-color: #a12525; RED */
+}
+
+/* Make sure your event-mini-map and event-details classes don't have any margins/paddings that would prevent the <a> tag from filling the event-card */
+
+
+.event-details {
+  flex: 1; /* Take up remaining space */
+  padding-right: 20px; /* Add some space between text and map */
+
+}
+
+.event-mini-map {
+  flex: none; /* Do not grow or shrink */
+  width: 30%; /* Adjust width as needed */
+  /* Height is controlled by the inline style in the component */
 }
 
 .event-card:hover {

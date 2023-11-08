@@ -1,5 +1,4 @@
-"use client";
-
+'use client'
 import Image from "next/image";
 import styles from "./page.module.css";
 import React from "react";
@@ -8,7 +7,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import MassShootingEvent from "./components/MassShootingEvent";
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
-// import L from 'leaflet';
+import L from 'leaflet'
 
 import 'leaflet/dist/leaflet.css';
 import Link from 'next/link'
@@ -22,19 +21,11 @@ export default function Home() {
 
   const [events, setEvents] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [displaySearchResults, setDisplaySearchReults] = useState(false);
-
+  const [displaySearchResults, setDisplaySearchResults] = useState(false);
   const [searchDate, setSearchDate] = useState<string | null>(null);
   const [searchLocation, setSearchLocation] = useState<string | null>(null);
 
   const fetchEvents = (filters?: string, date?: string, location?: string) => {
-    if (filters != "") {
-      setSearchDate("");
-      setSearchLocation("");
-      date = undefined;
-      location = undefined;
-    }
-
     axios
       .get("http://127.0.0.1:5000/events", {
         params: {
@@ -52,30 +43,54 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Make a GET request to your API endpoint using Axios
     fetchEvents();
   }, []);
 
   const handleSearch = () => {
-    fetchEvents(searchQuery, searchDate, searchLocation);
-    setDisplaySearchReults(true);
+    fetchEvents(searchQuery, searchDate ?? undefined, searchLocation ?? undefined);
+    setDisplaySearchResults(true);
+  };
+
+  const handleReset = () => {
+    setSearchQuery("");
+    setSearchDate(null);
+    setSearchLocation(null);
+    fetchEvents();
+    setDisplaySearchResults(false);
   };
 
   return (
     <div className="page-container">
       <section className="search-section">
         <h2>Welcome to the Mass Shooting Events Digital Library</h2>
+        <section className="map-container">
+          <MapContainer center={[38.9072, -77.0369]} zoom={5} style={{ width: '100%', height: '400px' }}>
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {events.filter(event => event.lat && event.long).map((event, index) => (
+              <Marker key={index} position={[event.lat, event.long]} icon={redDotIcon}>
+                <Popup>
+                  <Link key={event._id.$oid} href={`/events/${event._id.$oid}`}>{event.event_name}</Link>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </section>
         <p>
           Explore important statistics and information about mass shooting
           events.
         </p>
+
         <input
           type="text"
           placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button onClick={handleSearch}>Search</button>
+        <button onClick={handleSearch} style={{ marginRight: '8px' }}>Search</button>
+        <button onClick={handleReset}>Reset</button>
       </section>
 
       {!displaySearchResults && (
@@ -83,7 +98,7 @@ export default function Home() {
           <h2>Recent Mass Shootings</h2>
           {events.map((event, index) => (
             <MassShootingEvent
-              key={index} // Ensure each component maintains a unique key for optimal rendering performance
+              key={index}
               id={event._id.$oid}
               event={event.event_name}
               date={event.date || "N/A"}
@@ -99,29 +114,28 @@ export default function Home() {
 
       {displaySearchResults && (
         <section className="recent-events">
-          <h2>Search Results: </h2>
-          {events.map((event, index) => (
-            <MassShootingEvent
-              key={index} // Ensure each component maintains a unique key for optimal rendering performance
-              id={event._id.$oid}
-              event={event.event_name}
-              date={event.date || "N/A"}
-              perpetrator={event.perpetrator || "N/A"}
-              location={event.location || "N/A"}
-              numVictims={event.casualties || 0}
-            />
-          ))}
+          <h2>Search Results:</h2>
+          {events.length > 0 ? (
+            events.map((event, index) => (
+              <MassShootingEvent
+                key={index}
+                id={event._id.$oid}
+                event={event.event_name}
+                date={event.date || "N/A"}
+                perpetrator={event.perpetrator || "N/A"}
+                location={event.location || "N/A"}
+                numVictims={event.casualties || 0}
+                lat={event.lat || 0}
+                long={event.long || 0}
+              />
+            ))
+          ) : (
+            <p>No results found.</p>
+          )}
         </section>
       )}
-
-      <section className="statistics">
-        <h2>Mass Shootings Statistics</h2>
-        {/* Insert your timeline here */}
-        {/* Other components or elements */}
-      </section>
-
-      <section className="advanced-search">
-        <h2>Search Mass Shootings</h2>
+      <section className="recent-events">
+        <h2>Advanced Search</h2>
         <input
           type="date"
           value={searchDate || ""}
@@ -133,29 +147,12 @@ export default function Home() {
           value={searchLocation || ""}
           onChange={(e) => setSearchLocation(e.target.value)}
         />
-        <button onClick={handleSearch}>Search</button>
-      </section>
 
-      <section className="map-container">
-        <h2>Map of Mass Shootings</h2>
-        <MapContainer center={[38.9072, -77.0369]} zoom={5} style={{ width: '100%', height: '400px' }}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {events.filter(event => event.lat && event.long).map((event, index) => (
-            <Marker key={index} position={[event.lat, event.long]} icon={redDotIcon}>
-              <Popup>
-                <Link key={event._id.$oid} href={`/events/${event._id.$oid}`}>{event.event_name}</Link>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+        <div style = {{ marginTop: '10px'}}>
+          <button onClick={handleSearch} style={{ marginRight: '8px' }}>Search</button> {/* Add right margin to the Search button */}
+          <button onClick={handleReset}>Reset</button>
+        </div>
       </section>
-
     </div>
   );
 }
-
-
-
