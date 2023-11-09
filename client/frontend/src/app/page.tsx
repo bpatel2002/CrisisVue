@@ -11,6 +11,8 @@ import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 import Link from "next/link";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const redDotIcon = L.divIcon({
@@ -51,12 +53,16 @@ export default function Home() {
   }, []);
 
   const handleSearch = () => {
-    fetchEvents(
-      searchQuery,
-      searchDate ?? undefined,
-      searchLocation ?? undefined
-    );
-    setDisplaySearchResults(true);
+    if (searchQuery == "" && !searchDate && !searchLocation) {
+      toast.error("Search box is empty!")
+    } else{
+      fetchEvents(
+        searchQuery,
+        searchDate ?? undefined,
+        searchLocation ?? undefined
+      );
+      setDisplaySearchResults(true);
+    }
   };
 
   const handleReset = () => {
@@ -110,6 +116,7 @@ export default function Home() {
           />
           {!showAdvancedSearch && (
             <div>
+              <ToastContainer/>
               <button onClick={handleSearch} style={{ marginRight: "8px" }}>
                 Search
               </button>
