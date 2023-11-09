@@ -64,7 +64,7 @@ export default function Home() {
       <section className="search-section">
         <h2>Welcome to the Mass Shooting Events Digital Library</h2>
         <section className="map-container">
-          <MapContainer center={[38.9072, -77.0369]} zoom={5} style={{ width: '100%', height: '400px' }}>
+          <MapContainer center={[38.9072, -90.0369]} zoom={4.3} style={{ width: '100%', height: '400px' }}>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
