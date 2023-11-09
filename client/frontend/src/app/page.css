@@ -137,32 +137,6 @@ button:hover {
   box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow for depth */
 }
 
-@keyframes easeIn {
-  from {
-      opacity: 0;
-      transform: translateY(-10px);
-  }
-  to {
-      opacity: 1;
-      transform: translateY(0);
-  }
-}
-
-@keyframes easeOut {
-  from {
-      opacity: 1;
-      transform: translateY(0);
-  }
-  to {
-      opacity: 0;
-      transform: translateY(-10);
-  }
-}
-.advanced-Search{
-  animation: easeIn 0.5s forwards;
-  
-}
-
-.advanced-SearchOut{
-  animation: easeOut 0.5s forwards;
-}
+.leaflet-control { z-index: 0 !important}
+.leaflet-pane { z-index: 0 !important}
+.leaflet-top, .leaflet-bottom {z-index: 0 !important}
