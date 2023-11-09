@@ -67,68 +67,72 @@ function SubmitPage() {
     e.preventDefault();
 
     const user = auth.currentUser;
-    if (!user) throw new Error("User not logged in");
+    if (!user){
+      toast.error("User is not logged in!");
+    } else {
 
-    const token = await user.getIdToken();
+      const token = await user.getIdToken();
 
-    const additionalFieldsObject = additionalFields.reduce((obj, item) => {
-      if (item.key) obj[item.key] = item.value;
-      return obj;
-    }, {} as Record<string, string>);
+      const additionalFieldsObject = additionalFields.reduce((obj, item) => {
+        if (item.key) obj[item.key] = item.value;
+        return obj;
+      }, {} as Record<string, string>);
 
-    // Create a data object with the form data
-    const formData = {
-      place:place,
-      name: name,
-      perpetrator: perpetrator,
-      summary: summary,
-      date: date,
-      location: location,
-      motive: motive,
-      casualties: casualties,
-      urls: urls,
-      additional_fields: additionalFieldsObject,
-    };
+      // Create a data object with the form data
+      const formData = {
+        place:place,
+        name: name,
+        perpetrator: perpetrator,
+        summary: summary,
+        date: date,
+        location: location,
+        motive: motive,
+        casualties: casualties,
+        urls: urls,
+        additional_fields: additionalFieldsObject,
+      };
 
-    // verify url
-    const isUrlValid = validateUrls(urls);
+      // verify url
+      const isUrlValid = validateUrls(urls);
 
-    if (!isUrlValid) {
-      // Display an error message or take appropriate action for invalid URLs
-      toast.error("Invalid URLs. Please check and correct the URLs.");
-      return;
-    }
-    try {
-      // Make a POST request using Axios
-      const response = await axios.post(
-        "http://127.0.0.1:5000/events",
-        formData, {headers: {
-          'Authorization': `Bearer ${token}`
-        }}
-      );
+      if (!isUrlValid) {
+        // Display an error message or take appropriate action for invalid URLs
+        toast.error("Invalid URLs. Please check and correct the URLs.");
+        return;
+      }
+      try {
+        // Make a POST request using Axios
+        const response = await axios.post(
+          "http://127.0.0.1:5000/events",
+          formData, {headers: {
+            'Authorization': `Bearer ${token}`
+          }}
+        );
 
-      // Handle the response (you can display a success message, reset the form, etc.)
-      toast.success("Submission successful!");
+        // Handle the response (you can display a success message, reset the form, etc.)
+        toast.success("Submission successful!");
 
-      // Clear the form fields after successful submission (optional)
-      setName("");
-      setPerpetrator("");
-      setSummary("");
-      setDate("");
-      setLocation("");
-      setMotive("");
-      setCasualties("");
-      setAdditionalFields([{ key: "", value: "" }]);
-      setUrls("");
-    } catch (error) {
-      // Handle errors (you can display an error message to the user)
-      toast.error("Submission error:" + error);
+        // Clear the form fields after successful submission (optional)
+        setName("");
+        setPerpetrator("");
+        setSummary("");
+        setDate("");
+        setLocation("");
+        setMotive("");
+        setCasualties("");
+        setAdditionalFields([{ key: "", value: "" }]);
+        setUrls("");
+      } catch (error) {
+        // Handle errors (you can display an error message to the user)
+        toast.error("Submission error:" + error);
+      }
     }
   };
 
   return (
     <div className="form-container">
       <h1>Submit Information</h1>
+      <ToastContainer/>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Shooting Name:</label>
         <input
