@@ -4,6 +4,7 @@ import "./SubmitPage.css";
 import axios from "axios";
 import {auth} from '../firebase';
 import validator from "validator";
+import {useRouter} from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,6 +14,11 @@ interface AdditionalField {
 }
 
 function SubmitPage() {
+  const user = auth.currentUser;
+  const router = useRouter();
+  if (!user){
+    router.push('/login');
+  } 
   const [name, setName] = useState("");
   const [place, setPlace] = useState("");
   const [perpetrator, setPerpetrator] = useState("");
