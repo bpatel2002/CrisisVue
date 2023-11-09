@@ -26,7 +26,25 @@ const Login = () => {
   }
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return (<div className="login-container"> {/* Step 4: Apply the CSS class */}
+  <h1>Login</h1> {/* Optional: Added an H1 element for the title */}
+  <form onSubmit={handleSubmit} className="input-container"> {/* Step 4: Apply the CSS class */}
+    <input
+      type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      placeholder="Email"
+    />
+    <input
+      type="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="Password"
+    />
+    <button type="submit">Login</button>
+    <div className="error-message">Error Logging in, Please Try Again</div>
+  </form>
+</div>);
   if (user) return (
     <div style={containerStyle}>
       <ToastContainer />
