@@ -24,6 +24,10 @@ const Navbar = () => {
     return () => unsubscribe();
   }, []);
 
+  const ADMIN_MENU = [
+    { text: "Submit", href: "/submit" },
+    // { text: "Manage Events", href: "/manage-events" } add this later
+  ];
   return (
     <header>
       <nav className={`nav`}>
@@ -53,7 +57,7 @@ const Navbar = () => {
           {user && (
             <>
               {/* Submit */}
-              <div
+              {/* <div
                 onClick={() => {
                   setActiveIdx(MENU_LIST.length); // Assuming "Submit" is next in the order
                   setNavActive(false);
@@ -63,6 +67,18 @@ const Navbar = () => {
                   active={activeIdx === MENU_LIST.length}
                   text="Submit"
                   href="/submit"
+                />
+              </div> */}
+              <div
+                onClick={() => {
+                  setActiveIdx(MENU_LIST.length); // This will keep the Admin button highlighted when active
+                  setNavActive(false);
+                }}
+              >
+                <NavItem
+                  active={activeIdx === MENU_LIST.length}
+                  text="Admin"
+                  dropdownItems={ADMIN_MENU}
                 />
               </div>
               {/* Logout */}
