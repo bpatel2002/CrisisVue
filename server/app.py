@@ -84,9 +84,11 @@ def searchEvents():
     filters = request.args.get('filters', None)
     date = request.args.get('date', None)
     location = request.args.get('location', None)
+    sort = request.args.get('sort', None) 
+    sort = int(sort) if sort else 1
 
     try:
-        results = get_all(filters=filters, date=date, location=location)
+        results = get_all(filters=filters, date=date, location=location, sort=sort)
         results = list(results)
         return jsonify(json.loads(dumps(results))), 200
 

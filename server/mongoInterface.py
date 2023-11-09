@@ -135,7 +135,7 @@ def get_one_event_by_uid(uid):
     return list(db.Events.find(query))  # consume cursor and pass back as list
 
 
-def get_all(filters=None, event_name=None, date=None, location=None, limit=100):
+def get_all(filters=None, event_name=None, date=None, location=None, limit=100, sort=1):
     """
     Get documents that match the filters
     """
@@ -152,7 +152,7 @@ def get_all(filters=None, event_name=None, date=None, location=None, limit=100):
         },
         {
             '$sort': {
-                'date': 1
+                'date': int(sort) 
             }
         },
         {

@@ -32,6 +32,7 @@ export default function Home() {
           filters: filters || undefined,
           date: date || undefined,
           location: location || undefined,
+          sort: -1,
         },
       })
       .then((response) => {
