@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 import styles from "./page.module.css";
 import React from "react";
@@ -6,17 +6,16 @@ import "./page.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MassShootingEvent from "./components/MassShootingEvent";
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
-import L from 'leaflet'
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
+import L from "leaflet";
 
-import 'leaflet/dist/leaflet.css';
-import Link from 'next/link'
+import "leaflet/dist/leaflet.css";
+import Link from "next/link";
 
 export default function Home() {
-
   const redDotIcon = L.divIcon({
-    className: 'red-dot-icon',
-    iconSize: [10, 10]
+    className: "red-dot-icon",
+    iconSize: [10, 10],
   });
 
   const [events, setEvents] = useState<any[]>([]);
@@ -24,7 +23,11 @@ export default function Home() {
   const [displaySearchResults, setDisplaySearchResults] = useState(false);
   const [searchDate, setSearchDate] = useState<string | null>(null);
   const [searchLocation, setSearchLocation] = useState<string | null>(null);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
 
+  const toggleAdvancedSearch = () => {
+    setShowAdvancedSearch(!showAdvancedSearch); // This will toggle the state
+  };
   const fetchEvents = (filters?: string, date?: string, location?: string) => {
     axios
       .get("http://127.0.0.1:5000/events", {
@@ -48,7 +51,11 @@ export default function Home() {
   }, []);
 
   const handleSearch = () => {
-    fetchEvents(searchQuery, searchDate ?? undefined, searchLocation ?? undefined);
+    fetchEvents(
+      searchQuery,
+      searchDate ?? undefined,
+      searchLocation ?? undefined
+    );
     setDisplaySearchResults(true);
   };
 
@@ -70,28 +77,73 @@ export default function Home() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            {events.filter(event => event.lat && event.long).map((event, index) => (
-              <Marker key={index} position={[event.lat, event.long]} icon={redDotIcon}>
-                <Popup>
-                  <Link key={event._id.$oid} href={`/events/${event._id.$oid}`}>{event.event_name}</Link>
-                </Popup>
-              </Marker>
-            ))}
+            {events
+              .filter((event) => event.lat && event.long)
+              .map((event, index) => (
+                <Marker
+                  key={index}
+                  position={[event.lat, event.long]}
+                  icon={redDotIcon}
+                >
+                  <Popup>
+                    <Link
+                      key={event._id.$oid}
+                      href={`/events/${event._id.$oid}`}
+                    >
+                      {event.event_name}
+                    </Link>
+                  </Popup>
+                </Marker>
+              ))}
           </MapContainer>
         </section>
         <p>
           Explore important statistics and information about mass shooting
           events.
         </p>
+        <div style={{ display: "flex" }}>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {!showAdvancedSearch && (
+            <div>
+              <button onClick={handleSearch} style={{ marginRight: "8px" }}>
+                Search
+              </button>
+              <button onClick={handleReset}>Reset</button>
+            </div>
+          )}
+        </div>
+        <div style={{ marginTop: "10px" }}>
+        <button onClick={toggleAdvancedSearch} >Advanced Search</button>
+        </div>
+        {showAdvancedSearch && (
+          <section className= {`${showAdvancedSearch ? 'advanced-Search' : 'advanced-SearchOut'}`}>
+            <h2>Advanced Search</h2>
+            <input
+              type="date"
+              value={searchDate || ""}
+              onChange={(e) => setSearchDate(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Location"
+              value={searchLocation || ""}
+              onChange={(e) => setSearchLocation(e.target.value)}
+            />
 
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button onClick={handleSearch} style={{ marginRight: '8px' }}>Search</button>
-        <button onClick={handleReset}>Reset</button>
+            <div style={{ marginTop: "10px" }}>
+              <button onClick={handleSearch} style={{ marginRight: "8px" }}>
+                Search
+              </button>{" "}
+              {/* Add right margin to the Search button */}
+              <button onClick={handleReset}>Reset</button>
+            </div>
+          </section>
+        )}
       </section>
 
       {!displaySearchResults && (
@@ -135,25 +187,6 @@ export default function Home() {
           )}
         </section>
       )}
-      <section className="recent-events">
-        <h2>Advanced Search</h2>
-        <input
-          type="date"
-          value={searchDate || ""}
-          onChange={(e) => setSearchDate(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Location"
-          value={searchLocation || ""}
-          onChange={(e) => setSearchLocation(e.target.value)}
-        />
-
-        <div style = {{ marginTop: '10px'}}>
-          <button onClick={handleSearch} style={{ marginRight: '8px' }}>Search</button> {/* Add right margin to the Search button */}
-          <button onClick={handleReset}>Reset</button>
-        </div>
-      </section>
     </div>
   );
 }
