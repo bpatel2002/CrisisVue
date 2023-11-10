@@ -84,19 +84,22 @@ const EventDetail = ({
     return <p>Loading...</p>;
   }
 
+  // Destructure the _id and event_name from the details and pass the rest to the ClickedEvent component
+  const { _id, event_name, lat, long, date_submitted, casualties, ...restOfDetails } = eventDetails;
+
   return (
     <div>
       <ClickedEvent
         id={params.id} // assuming the ID is here
-        event={eventDetails.event_name}
-        date={eventDetails.date || "N/A"}
-        perpetrator={eventDetails.perpetrator || "N/A"}
-        location={eventDetails.location || "N/A"}
-        numVictims={eventDetails.casualties || 0}
-        summary={eventDetails.summary || "N/A"}
-        motive={eventDetails.motive || "N/A"}
-        place={eventDetails.place || "N/A"}
-
+        event={event_name}
+        date={restOfDetails.date || "N/A"}
+        perpetrator={restOfDetails.perpetrator || "N/A"}
+        location={restOfDetails.location || "N/A"}
+        numVictims={restOfDetails.casualties || 0}
+        summary={restOfDetails.summary || "N/A"}
+        motive={restOfDetails.motive || "N/A"}
+        place={restOfDetails.place || "N/A"}
+        {...restOfDetails}
       />
       <div className="url-list-container">
         {eventUrls != null && eventUrls.url_list.length > 0 ? (
