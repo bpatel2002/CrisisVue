@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MassShootingEvent from "@/app/components/MassShootingEvent";
 import ClickedEvent from "@/app/components/clickedEvent";
+import DeleteButton from '@/app/components/DeleteButton';
 
 interface EventDetails {
   _id: { $oid: string }; // Adjusted based on JSON structure
@@ -25,8 +26,12 @@ const EventDetail = ({
   params: { id: string; event_name: string };
 }) => {
   const [event, setEvent] = useState<EventDetails | null>(null);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const axios = require("axios");
 
+  const handleDeleteSuccess = () => {
+    setIsDeleted(true);
+  };
   // Function to make the GET request, taking 'eventId' as a parameter
   const getEventById = async (eventId: string) => {
     // Construct the complete URL to the specific event using the 'eventId'
@@ -80,15 +85,23 @@ const EventDetail = ({
     fetch_source_urls();
   }, []);
 
-  if (!eventDetails) {
-    return <p>Loading...</p>;
+  if (!eventDetails || isDeleted) {
+    return (
+      <div className="url-list-container">
+        {isDeleted ? (
+          <button onClick={() => router.push('/')}>Return To Home</button>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+    );
   }
-
   // Destructure the _id and event_name from the details and pass the rest to the ClickedEvent component
   const { _id, event_name, lat, long, date_submitted, casualties, ...restOfDetails } = eventDetails;
 
   return (
     <div>
+       <DeleteButton eventId={eventDetails._id} onDeleteSuccess={handleDeleteSuccess} />
       <ClickedEvent
         id={params.id} // assuming the ID is here
         event={event_name}
